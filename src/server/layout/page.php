@@ -6,8 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
 
   <title>Slim Wiki</title>
+
+  <base href="<?php echo $baseUrl; ?>/">
+
+  <!-- build:css client/css/style.css -->
+  <link rel="stylesheet" href="../dist/client/css/style.css">
+  <!-- endbuild -->
+
 </head>
 <body>
-  <article><?php echo $articleMarkup ?></article>
+  <article class="markdown-body"><?php echo $articleMarkup; ?></article>
 </body>
 </html>

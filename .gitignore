@@ -1,1 +1,4 @@
 /.idea/
+/dist/
+/src/.tmp/
+/src/node_modules/
