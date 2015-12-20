@@ -9,9 +9,12 @@ class Main {
     // - $appPath: E.g. '/slim-wiki'
     // - $requestPathArray: E.g. array('myfolder', 'mypage')
     public function dispatch($baseUrl, $appPath, $requestPathArray) {
-
         $articleBaseDir = realpath(__DIR__ . '/../../articles');
         $articleFilename = $articleBaseDir . '/' . implode('/', $requestPathArray);
+
+        if (is_dir($articleFilename)) {
+            $articleFilename = rtrim($articleFilename, '/') . '/index.md';
+        }
 
         if (($articleFilename == realpath($articleFilename)) && file_exists($articleFilename) && is_readable($articleFilename)) {
             $articleContent = file_get_contents($articleFilename);
