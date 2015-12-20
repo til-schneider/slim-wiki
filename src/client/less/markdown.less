@@ -1,6 +1,7 @@
 .markdown-body {
   font-size: 16px;
   color: #666;
+  line-height: 1.4;
 
   p, blockquote, ul, ol, dl, li, table, pre, h5, h6 {
     margin: 15px 0;
@@ -49,30 +50,30 @@
     color: #888;
   }
 
-  code, pre {
-    border-radius: 3px;
-    background-color: #F8F8F8;
-    font: 14px Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    color: inherit;
-  }
-
   code {
     border: 1px solid #EAEAEA;
+    border-radius: 3px;
+    background-color: #F8F8F8; // #232323;
+    font: 14px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+
     margin: 0 2px;
     padding: 0 5px;
   }
 
   pre {
-    border: 1px solid #CCCCCC;
-    line-height: 1.2;
     overflow: auto;
-    padding: 6px 10px;
   }
 
   pre > code {
-    border: 0;
-    margin: 0;
-    padding: 0;
+    display: block;
+    border: 1px solid #CCCCCC;
+    line-height: 1.2;
+    margin: 20px 0;
+    padding: 15px 10px;
+  }
+
+  code .hljs-tag {
+    background: transparent; // No special background for XML/HTML tags
   }
 
   table {

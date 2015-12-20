@@ -42,15 +42,24 @@ Numbered lists:
 And now some code:
 
     // Code is just text indented a bit
-    which(is_easy) to_remember();
+    which(isEasy) toRemember();
 
 ~~~
 // Un-indented code blocks work too
 
-if (this_is_more_code == true && !indented) {
+if (thisIsMoreCode == true && !indented) {
     // tild wrapped code blocks, also not indented
 }
 ~~~
+
+Backticks and language selection for syntax highlighting work too:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <some-tag with="argument">And text</some-tag>
+</root>
+```
 
 Text with  
 two trailing spaces  
@@ -64,11 +73,13 @@ for things like poems
 ****
 --------------------------
 
+### Embedded HTML
+
 <div style="font-size: 20px; color:green; text-shadow: 4px 4px 2px rgba(0, 0, 0, 0.3);">
 This is <b>embedded HTML</b>
 </div>
 
-## Tables ##
+### Tables
 
 | Header | Header | Right  |
 | ------ | ------ | -----: |

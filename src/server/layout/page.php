@@ -9,12 +9,26 @@
 
   <base href="<?php echo $baseUrl; ?>/">
 
-  <!-- build:css client/css/style.css -->
-  <link rel="stylesheet" href="../dist/client/css/style.css">
+  <!-- build:css client/view.css -->
+  <!--
+   | Styles see: https://highlightjs.org/static/demo/
+   | Good bright styles: default, color-brewer, github, idea
+   | Good dark styles:   agate, androidstudio, hybrid, railscasts, sunburst, tomorrow-night
+   +-->
+  <link rel="stylesheet" href="client/libs/highlightjs/styles/idea.css">
+
+  <link href=".tmp/app-view.css" rel="stylesheet" />
   <!-- endbuild -->
 
 </head>
 <body>
   <article class="markdown-body"><?php echo $articleMarkup; ?></article>
 </body>
+
+<!-- build:js client/view.js -->
+<script src="client/libs/highlightjs/highlight.pack.js"></script>
+
+<script src="client/js/Main.js"></script>
+<!-- endbuild -->
+
 </html>

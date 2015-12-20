@@ -10,7 +10,7 @@ module.exports = function (grunt) {
     'less',
     'useminPrepare',
     'concat',
-    //'uglify',  // TODO: uncomment if there is JavaScript
+    'uglify',
     'cssmin',
     'usemin'
   ]);
@@ -43,7 +43,7 @@ module.exports = function (grunt) {
       dist: {
         files: (function () {
           var files = {};
-          files[dist + '/client/css/style.css'] = 'client/less/style.less';
+          files['.tmp/app-view.css'] = 'client/less/app-view.less';
           return files;
         })()
       }

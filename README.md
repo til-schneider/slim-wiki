@@ -33,5 +33,6 @@ Used libraries
 --------------
 
 - [Parsedown](https://github.com/erusev/parsedown/) - PHP markdown parser
+- [highlight.js](https://highlightjs.org/) - JavaScript syntax highlighter
 
 Slim wiki is inspired by [Wikitten](https://github.com/victorstanciu/Wikitten).
