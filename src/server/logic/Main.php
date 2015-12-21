@@ -21,7 +21,10 @@ class Main {
             $data = array();
             $data['baseUrl']  = $baseUrl;
             $data['basePath'] = $basePath;
-            $data['wikiName'] = $config['wikiName'];
+
+            foreach (array('wikiName', 'footerHtml') as $key) {
+                $data[$key] = $config[$key];
+            }
 
             $data['breadcrumbs'] = $this->createBreadcrumbs($articleBaseDir, $requestPathArray, $config['wikiName']);
 

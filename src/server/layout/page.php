@@ -22,21 +22,28 @@
 
 </head>
 <body>
-  <nav class="breadcrumbs"><div class="main-column"><?php
-    $isFirst = true;
-    foreach ($data['breadcrumbs'] as $item) {
-      if (! $isFirst) {
-        echo ' / ';
+  <div id="wrapper">
+    <nav class="breadcrumbs"><div class="main-column"><?php
+      $isFirst = true;
+      foreach ($data['breadcrumbs'] as $item) {
+        if (! $isFirst) {
+          echo ' / ';
+        }
+        if ($item['active']) {
+          echo $item['name'];
+        } else {
+          ?><a href="<?php echo $data['basePath'] . $item['path']; ?>"><?php echo $item['name']; ?></a><?php
+        }
+        $isFirst = false;
       }
-      if ($item['active']) {
-        echo $item['name'];
-      } else {
-        ?><a href="<?php echo $data['basePath'] . $item['path']; ?>"><?php echo $item['name']; ?></a><?php
-      }
-      $isFirst = false;
+    ?></div></nav>
+    <article class="content main-column"><?php echo $data['articleHtml']; ?></article>
+    <?php
+    if (isset($data['footerHtml'])) {
+      ?><footer><div class="main-column"><?php echo $data['footerHtml']; ?></div></footer><?php
     }
-  ?></div></nav>
-  <article class="content main-column"><?php echo $data['articleHtml']; ?></article>
+   ?>
+  </div>
 </body>
 
 <!-- build:js client/view.js -->
