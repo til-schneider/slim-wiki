@@ -7,7 +7,7 @@
 
   <title><?php echo $data['wikiName']; ?></title>
 
-  <base href="<?php echo $data['baseUrl']; ?>/">
+  <base href="<?php echo $data['baseUrl']; ?>">
 
   <!-- build:css client/view.css -->
   <!--
