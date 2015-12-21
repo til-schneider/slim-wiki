@@ -36,7 +36,7 @@
       $isFirst = false;
     }
   ?></div></nav>
-  <article class="markdown-body main-column"><?php echo $data['articleHtml']; ?></article>
+  <article class="content main-column"><?php echo $data['articleHtml']; ?></article>
 </body>
 
 <!-- build:js client/view.js -->
