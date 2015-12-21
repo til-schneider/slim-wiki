@@ -12,8 +12,14 @@ class Main {
         $articleBaseDir = realpath(__DIR__ . '/../../articles') . '/';
         $articleFilename = $articleBaseDir . implode('/', $requestPathArray);
 
+        // Support `index.md` for directories
         if (is_dir($articleFilename)) {
             $articleFilename = rtrim($articleFilename, '/') . '/index.md';
+        }
+
+        // Make the extension `.md` optional
+        if (! file_exists($articleFilename) && file_exists($articleFilename . '.md')) {
+            $articleFilename .= '.md';
         }
 
         if (($articleFilename == realpath($articleFilename)) && file_exists($articleFilename) && is_readable($articleFilename)) {

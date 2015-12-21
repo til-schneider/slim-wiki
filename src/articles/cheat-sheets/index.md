@@ -5,4 +5,4 @@ If you add an `index.md` into a directory, it will become a part of the breadcru
 
 Use it as overview for subpages of that directory:
 
-- [Markdown cheat sheet](cheat-sheets/Markdown_cheat_sheet.md) - shows the markdown syntax.
+- [Markdown cheat sheet](cheat-sheets/Markdown_cheat_sheet) - shows the markdown syntax.
