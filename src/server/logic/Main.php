@@ -10,19 +10,12 @@ class Main {
     // - $requestPathArray: E.g. array('myfolder', 'mypage')
     public function dispatch($baseUrl, $basePath, $requestPathArray) {
         $articleBaseDir = realpath(__DIR__ . '/../../articles') . '/';
-        $articleFilename = $articleBaseDir . implode('/', $requestPathArray);
-
-        // Support `index.md` for directories
-        if (is_dir($articleFilename)) {
-            $articleFilename = rtrim($articleFilename, '/') . '/index.md';
-        }
-
-        // Make the extension `.md` optional
-        if (! file_exists($articleFilename) && file_exists($articleFilename . '.md')) {
-            $articleFilename .= '.md';
-        }
-
-        if (($articleFilename == realpath($articleFilename)) && file_exists($articleFilename) && is_readable($articleFilename)) {
+        $articleFilename = $this->getArticleFilename($articleBaseDir, $requestPathArray);
+        if ($articleFilename == null) {
+            header('HTTP/1.0 404 Not Found');
+            header('Content-Type:text/html; charset=utf-8');
+            echo '<h1>File not found</h1>'; // TODO: Show error page
+        } else {
             $wikiName = 'Slim Wiki'; // TODO: Make this configurable
 
             $data = array();
@@ -36,13 +29,32 @@ class Main {
             $data['articleHtml'] = Parsedown::instance()->text($articleContent);
 
             $this->renderPage($data);
-        } else {
-            // TODO: Show error page
-            echo '<p style="color:#990000">File does not exist or is not readable: '.$articleFilename.'</p>';
         }
 
     }
 
+    private function getArticleFilename($articleBaseDir, $requestPathArray) {
+        $articleFilename = $articleBaseDir . implode('/', $requestPathArray);
+
+        // Support `index.md` for directories
+        if (is_dir($articleFilename)) {
+            $articleFilename = rtrim($articleFilename, '/') . '/index.md';
+        }
+
+        // Make the extension `.md` optional
+        if (! file_exists($articleFilename) && file_exists($articleFilename . '.md')) {
+            $articleFilename .= '.md';
+        }
+
+        if ($articleFilename != realpath($articleFilename)) {
+            // Attempt to break out of article base directory (e.g. `../../outside.ext`)
+            return null;
+        } else if (file_exists($articleFilename) && is_readable($articleFilename)) {
+            return $articleFilename;
+        } else {
+            return null;
+        }
+    }
 
     private function createBreadcrumbs($articleBaseDir, $requestPathArray, $wikiName) {
         $pathCount = count($requestPathArray);
@@ -66,8 +78,9 @@ class Main {
         return $breadcrumbArray;
     }
 
-
     private function renderPage($data) {
+        header('Content-Type:text/html; charset=utf-8');
+
         include(__DIR__ . '/../layout/page.php');
     }
 
