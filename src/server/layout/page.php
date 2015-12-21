@@ -71,7 +71,7 @@
 <script src="client/libs/CodeMirror/lib/codemirror.js"></script>
 <script src="client/libs/CodeMirror/addon/mode/overlay.js"></script> <!-- Allow language-in-language -->
 <script src="client/libs/CodeMirror/mode/markdown/markdown.js"></script>
-<script src="client/libs/CodeMirror/mode/gfm/gfm.js"></script>
+<script src="client/libs/CodeMirror/mode/gfm/gfm-patched.js"></script>
 
 <!-- Nested languages -->
 <script src="client/libs/CodeMirror/mode/clike/clike.js"></script>
