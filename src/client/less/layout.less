@@ -1,5 +1,5 @@
 
-// Reset browser styles
+// Reset browser sizes
 
 //ol, ul, li,
 html, body, div, span, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, img, b, u, i, form, label, table, tbody, tfoot, thead, tr, th, td {
@@ -22,14 +22,19 @@ table {
   border-spacing: 0;
 }
 
-// Basic styling
+// Layout
 
-body {
-  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, sans-serif;
-  font-size: 16px;
-  color: #333;
-}
+// We need a variable using brackets here, otherwise less won't calculate the width
+// See: https://github.com/less/less.js/issues/1903
+@small-screen-breakpoint: (@contentMaxWidth + 2 * @contentMinMarginX);
 
-article {
-  margin: 0 50px 100px;
+.main-column {
+  width: @contentMaxWidth;
+  margin: 0 auto;
+
+  @media (max-width: @small-screen-breakpoint) {
+    width: auto;
+    margin: 0 @contentMinMarginX;
+  }
+
 }

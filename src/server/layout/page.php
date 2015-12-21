@@ -5,9 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
 
-  <title>Slim Wiki</title>
+  <title><?php echo $data['wikiName']; ?></title>
 
-  <base href="<?php echo $baseUrl; ?>/">
+  <base href="<?php echo $data['baseUrl']; ?>/">
 
   <!-- build:css client/view.css -->
   <!--
@@ -22,7 +22,21 @@
 
 </head>
 <body>
-  <article class="markdown-body"><?php echo $articleMarkup; ?></article>
+  <nav class="breadcrumbs"><div class="main-column"><?php
+    $isFirst = true;
+    foreach ($data['breadcrumbs'] as $item) {
+      if (! $isFirst) {
+        echo ' / ';
+      }
+      if ($item['active']) {
+        echo $item['name'];
+      } else {
+        ?><a href="<?php echo $data['basePath'] . $item['path']; ?>"><?php echo $item['name']; ?></a><?php
+      }
+      $isFirst = false;
+    }
+  ?></div></nav>
+  <article class="markdown-body main-column"><?php echo $data['articleHtml']; ?></article>
 </body>
 
 <!-- build:js client/view.js -->
