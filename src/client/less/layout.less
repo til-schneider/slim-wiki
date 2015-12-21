@@ -32,14 +32,46 @@ html, body {
   height: 100%;
 }
 
-#wrapper {
+#main-wrapper {
   position: relative;
   min-height: 100%;
+
+  .edit-mode & {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+  }
+}
+
+.edit-mode {
+  #editor-wrapper {
+    position: fixed;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+
+    .CodeMirror {
+      height: 100%;
+    }
+  }
+  #editor {
+    // The textarea is only used by CodeMirror to obtain the source code, the actual editor is placed after the textarea
+    // -> We hide the textarea in order to avoid flickering while loading
+    display: none;
+  }
 }
 
 .main-column {
   width: @contentMaxWidth;
   margin: 0 auto;
+
+  .edit-mode & {
+    width: auto;
+    margin: 0 @contentMinMarginX;
+  }
 
   @media (max-width: @small-screen-breakpoint) {
     width: auto;
@@ -49,9 +81,13 @@ html, body {
 
 .breadcrumbs {
   position: fixed;
-  left: 0;
+  right: 0;
   top: 0;
   width: 100%;
+
+  .edit-mode & {
+    width: 50%;
+  }
 }
 
 .content {

@@ -9,6 +9,13 @@ class Main {
     // - $basePath:         E.g. '/slim-wiki/'
     // - $requestPathArray: E.g. array('myfolder', 'mypage')
     public function dispatch($baseUrl, $basePath, $requestPathArray) {
+        $config = $this->loadConfig();
+
+        $isEditMode = isset($requestPathArray[0]) && $requestPathArray[0] == 'edit';
+        if ($isEditMode) {
+            array_shift($requestPathArray);
+        }
+
         $articleBaseDir = realpath(__DIR__ . '/../../articles') . '/';
         $articleFilename = $this->getArticleFilename($articleBaseDir, $requestPathArray);
         if ($articleFilename == null) {
@@ -16,11 +23,10 @@ class Main {
             header('Content-Type:text/html; charset=utf-8');
             echo '<h1>File not found</h1>'; // TODO: Show error page
         } else {
-            $config = $this->loadConfig();
-
             $data = array();
-            $data['baseUrl']  = $baseUrl;
-            $data['basePath'] = $basePath;
+            $data['baseUrl']    = $baseUrl;
+            $data['basePath']   = $basePath;
+            $data['isEditMode'] = $isEditMode;
 
             foreach (array('wikiName', 'footerHtml') as $key) {
                 $data[$key] = $config[$key];
@@ -28,8 +34,9 @@ class Main {
 
             $data['breadcrumbs'] = $this->createBreadcrumbs($articleBaseDir, $requestPathArray, $config['wikiName']);
 
-            $articleContent = file_get_contents($articleFilename);
-            $data['articleHtml'] = Parsedown::instance()->text($articleContent);
+            $articleMarkdown = file_get_contents($articleFilename);
+            $data['articleMarkdown'] = $articleMarkdown;
+            $data['articleHtml'] = Parsedown::instance()->text($articleMarkdown);
 
             $this->renderPage($data);
         }
