@@ -6,7 +6,10 @@ Place the content of your *slim wiki* into this directory. Write it using
 
 Use the main page as overview and add links to subpages:
 
-- [Cheat Sheets](cheat-sheets) - You can add links to directories having a `index.md`.
-- [Markdown cheat sheet](cheat-sheets/Markdown_cheat_sheet) - Or add direct a link to a markdown file.
+- [Cheat Sheets](cheat_sheets) - You can add links to directories having a `index.md`.
+- [Markdown cheat sheet](cheat_sheets/Markdown_cheat_sheet) - Or add direct a link to a markdown file.
 
-**Note:** The `.md` extension is optional when linking to markdown files.
+**Notes:**
+
+- The extension `.md` is optional when linking to markdown files.
+- Underscores in directory or file names are shown as spaces in the breadcrumbs. So if you name your file `My_new_page.md`, it will be shown as `My new page`.

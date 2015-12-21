@@ -56,7 +56,10 @@ class Main {
 
             if ($isLast || file_exists($articleBaseDir . $currentPath . '/index.md')) {
                 // This is the requested file or an directory having an index -> Add it
-                $breadcrumbArray[] = array('name' => $pathPart, 'path' => urlencode($currentPath), 'active' => $isLast);
+                $breadcrumbArray[] = array(
+                    'name' => str_replace('_', ' ', $pathPart),
+                    'path' => urlencode($currentPath),
+                    'active' => $isLast);
             }
         }
 
