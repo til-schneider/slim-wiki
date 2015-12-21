@@ -2,3 +2,4 @@
 /dist/
 /src/.tmp/
 /src/node_modules/
+/src/config.php

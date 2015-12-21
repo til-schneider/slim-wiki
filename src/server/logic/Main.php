@@ -16,21 +16,20 @@ class Main {
             header('Content-Type:text/html; charset=utf-8');
             echo '<h1>File not found</h1>'; // TODO: Show error page
         } else {
-            $wikiName = 'Slim Wiki'; // TODO: Make this configurable
+            $config = $this->loadConfig();
 
             $data = array();
             $data['baseUrl']  = $baseUrl;
             $data['basePath'] = $basePath;
-            $data['wikiName'] = $wikiName;
+            $data['wikiName'] = $config['wikiName'];
 
-            $data['breadcrumbs'] = $this->createBreadcrumbs($articleBaseDir, $requestPathArray, $wikiName);
+            $data['breadcrumbs'] = $this->createBreadcrumbs($articleBaseDir, $requestPathArray, $config['wikiName']);
 
             $articleContent = file_get_contents($articleFilename);
             $data['articleHtml'] = Parsedown::instance()->text($articleContent);
 
             $this->renderPage($data);
         }
-
     }
 
     private function getArticleFilename($articleBaseDir, $requestPathArray) {
@@ -54,6 +53,19 @@ class Main {
         } else {
             return null;
         }
+    }
+
+    private function loadConfig() {
+        // Defaults
+        $config = array(
+            'wikiName' => 'Slim Wiki'
+        );
+
+        if (file_exists(__DIR__ . '/../../config.php')) {
+            include(__DIR__ . '/../../config.php');
+        }
+
+        return $config;
     }
 
     private function createBreadcrumbs($articleBaseDir, $requestPathArray, $wikiName) {
