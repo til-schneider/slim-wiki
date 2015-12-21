@@ -5,10 +5,10 @@ require_once __DIR__ . '/../lib/parsedown/Parsedown.php';
 class Main {
 
     // Parameters:
-    // - $baseUrl: E.g. 'http://localhost/slim-wiki/'
-    // - $appPath: E.g. '/slim-wiki'
+    // - $baseUrl:          E.g. 'http://localhost/slim-wiki/'
+    // - $basePath:         E.g. '/slim-wiki/'
     // - $requestPathArray: E.g. array('myfolder', 'mypage')
-    public function dispatch($baseUrl, $appPath, $requestPathArray) {
+    public function dispatch($baseUrl, $basePath, $requestPathArray) {
         $articleBaseDir = realpath(__DIR__ . '/../../articles');
         $articleFilename = $articleBaseDir . '/' . implode('/', $requestPathArray);
 
