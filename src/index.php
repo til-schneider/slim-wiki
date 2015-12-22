@@ -35,6 +35,6 @@ $baseUrl = 'http' . ($https ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $baseP
 
 unset($uriPathArray, $scriptPathArray, $basePathArray, $isBasePath, $https);
 
-require_once __DIR__ . '/server/logic/main.php';
+require_once __DIR__ . '/server/logic/Main.php';
 
-(new Main())->dispatch($baseUrl, $basePath, $requestPathArray);
+Main::get()->dispatch($baseUrl, $basePath, $requestPathArray);

@@ -51,7 +51,7 @@
         $isFirst = false;
       }
     ?></div></nav>
-    <article class="content main-column"><?php echo $data['articleHtml']; ?></article>
+    <article id="content" class="markdown main-column"><?php echo $data['articleHtml']; ?></article>
     <?php
     if (isset($data['footerHtml'])) {
       ?><footer><div class="main-column"><?php echo $data['footerHtml']; ?></div></footer><?php
