@@ -39,7 +39,7 @@ class EditorService {
         gzwrite ($fp, $markdownText);
         gzclose($fp);
 
-        return $this->context->getRenderService()->renderMarkdown($markdownText);
+        return $this->context->getRenderService()->renderMarkdown($markdownText, true);
     }
 
 }

@@ -97,7 +97,7 @@ class Main {
             $data['articleFilename'] = $articleFilename;
             $articleMarkdown = file_get_contents($this->context->getArticleBaseDir() . $articleFilename);
             $data['articleMarkdown'] = $articleMarkdown;
-            $data['articleHtml'] = $this->context->getRenderService()->renderMarkdown($articleMarkdown);
+            $data['articleHtml'] = $this->context->getRenderService()->renderMarkdown($articleMarkdown, $isEditMode);
 
             $this->renderPage($data);
         }
