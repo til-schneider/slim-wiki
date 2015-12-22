@@ -1,4 +1,4 @@
-(function(CodeMirror) {
+(function(window, document, console, CodeMirror) {
 
   var editor,
       updatePreviewDelay = 1000,
@@ -35,6 +35,7 @@
             console.error('Rendering markdown failed', error);
           } else {
             document.getElementById('content').innerHTML = result;
+            slimwiki.View.updateSyntaxHighlighting();
             console.log('Updated preview in ' + (new Date().getTime() - start) + ' ms');
           }
 
@@ -76,4 +77,4 @@
 
   init();
 
-})(CodeMirror);
+})(window, document, console, CodeMirror);
