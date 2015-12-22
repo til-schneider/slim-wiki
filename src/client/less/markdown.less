@@ -67,14 +67,21 @@
   pre {
     overflow: auto;
     margin: 20px 0;
+
+    border: 1px solid #CCCCCC;
+    border-radius: 3px;
   }
 
   pre > code {
     display: block;
-    border: 1px solid #CCCCCC;
     line-height: 1.2;
     margin: 0;
     padding: 15px 10px;
+
+    // If the code element scrolls, the scroll bars look screwed up together with the border
+    // -> We put the border to the parent `pre` element
+    border: none;
+    border-radius: none;
   }
 
   code .hljs-tag {
