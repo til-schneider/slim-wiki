@@ -61,6 +61,17 @@
 </body>
 
 <?php if ($data['isEditMode']) { ?>
+
+<script type="text/javascript">
+  window.slimwiki = <?php
+    echo json_encode(array(
+      "settings" => array(
+        "articleFilename" => $data['articleFilename']
+      )
+    ));
+  ?>;
+</script>
+
 <!-- build:js client/edit.js -->
 <script src="client/libs/CodeMirror/lib/codemirror.js"></script>
 <script src="client/libs/CodeMirror/addon/mode/overlay.js"></script> <!-- Allow language-in-language -->

@@ -1,6 +1,7 @@
 (function(window, document, console, CodeMirror) {
 
-  var editor,
+  var slimwiki = window.slimwiki,
+      editor,
       updatePreviewDelay = 1000,
       updatePreviewTimeout = null,
       updatePreviewRunning = false,
@@ -27,16 +28,17 @@
         previewIsDirty = false;
 
         updatePreviewRunning = true;
-        var start = new Date().getTime();
-        callRpc('render', 'renderMarkdown', [ editor.getValue() ], function(result, error) {
+        var start = new Date().getTime(),
+            articleFilename = slimwiki.settings.articleFilename;
+        callRpc('editor', 'saveArticle', [ articleFilename, editor.getValue() ], function(result, error) {
           updatePreviewRunning = false;
 
           if (error) {
-            console.error('Rendering markdown failed', error);
+            console.error('Saving article failed:', error);
           } else {
             document.getElementById('content').innerHTML = result;
             slimwiki.View.updateSyntaxHighlighting();
-            console.log('Updated preview in ' + (new Date().getTime() - start) + ' ms');
+            console.log('Saved article in ' + (new Date().getTime() - start) + ' ms');
           }
 
           if (previewIsDirty) {

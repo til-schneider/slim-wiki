@@ -1,14 +1,16 @@
 <?php
 
+require_once __DIR__ . '/Context.php';
+
 class Main {
 
     private static $singleton;
 
-    private $articleBaseDir;
+    private $context;
 
 
     private function __construct() {
-        $this->articleBaseDir = realpath(__DIR__ . '/../../articles') . '/';
+        $this->context = new Context();
     }
 
     public static function get() {
@@ -23,12 +25,10 @@ class Main {
     // - $basePath:         E.g. '/slim-wiki/'
     // - $requestPathArray: E.g. array('myfolder', 'mypage')
     public function dispatch($baseUrl, $basePath, $requestPathArray) {
-        $config = $this->loadConfig();
-
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->handlePost($requestPathArray);
         } else {
-            $this->handleGet($baseUrl, $basePath, $requestPathArray, $config);
+            $this->handleGet($baseUrl, $basePath, $requestPathArray);
         }
     }
 
@@ -38,9 +38,8 @@ class Main {
 
             $objectName = $requestPathArray[1];
             $object = null;
-            if ($objectName == 'render') {
-                require_once __DIR__ . '/RenderService.php';
-                $object = RenderService::get();
+            if ($objectName == 'editor') {
+                $object = $this->context->getEditorService();
             }
 
             $responseData = array(
@@ -72,7 +71,7 @@ class Main {
         }
     }
 
-    private function handleGet($baseUrl, $basePath, $requestPathArray, $config) {
+    private function handleGet($baseUrl, $basePath, $requestPathArray) {
         $isEditMode = isset($requestPathArray[0]) && $requestPathArray[0] == 'edit';
         if ($isEditMode) {
             array_shift($requestPathArray);
@@ -84,6 +83,8 @@ class Main {
             header('Content-Type:text/html; charset=utf-8');
             echo '<h1>File not found</h1>'; // TODO: Show error page
         } else {
+            $config = $this->context->getConfig();
+
             $data = array();
             $data['baseUrl']    = $baseUrl;
             $data['basePath']   = $basePath;
@@ -95,50 +96,38 @@ class Main {
 
             $data['breadcrumbs'] = $this->createBreadcrumbs($requestPathArray, $config['wikiName']);
 
-            $articleMarkdown = file_get_contents($articleFilename);
+            $data['articleFilename'] = $articleFilename;
+            $articleMarkdown = file_get_contents($this->context->getArticleBaseDir() . $articleFilename);
             $data['articleMarkdown'] = $articleMarkdown;
-
-            require_once __DIR__ . '/RenderService.php';
-            $data['articleHtml'] = RenderService::get()->renderMarkdown($articleMarkdown);
+            $data['articleHtml'] = $this->context->getRenderService()->renderMarkdown($articleMarkdown);
 
             $this->renderPage($data);
         }
     }
 
     private function getArticleFilename($requestPathArray) {
-        $articleFilename = $this->articleBaseDir . implode('/', $requestPathArray);
+        $articleBaseDir = $this->context->getArticleBaseDir();
+        $articleFilename = implode('/', $requestPathArray);
 
         // Support `index.md` for directories
-        if (is_dir($articleFilename)) {
+        if (is_dir($articleBaseDir . $articleFilename)) {
             $articleFilename = rtrim($articleFilename, '/') . '/index.md';
         }
 
         // Make the extension `.md` optional
-        if (! file_exists($articleFilename) && file_exists($articleFilename . '.md')) {
+        if (! file_exists($articleBaseDir . $articleFilename) && file_exists($articleBaseDir . $articleFilename . '.md')) {
             $articleFilename .= '.md';
         }
 
-        if ($articleFilename != realpath($articleFilename)) {
+        $articleFullFilename = $articleBaseDir . $articleFilename;
+        if (! $this->context->isValidArticleFilename($articleFilename)) {
             // Attempt to break out of article base directory (e.g. `../../outside.ext`)
             return null;
-        } else if (file_exists($articleFilename) && is_readable($articleFilename)) {
+        } else if (file_exists($articleFullFilename) && is_readable($articleFullFilename)) {
             return $articleFilename;
         } else {
             return null;
         }
-    }
-
-    private function loadConfig() {
-        // Defaults
-        $config = array(
-            'wikiName' => 'Slim Wiki'
-        );
-
-        if (file_exists(__DIR__ . '/../../config.php')) {
-            include(__DIR__ . '/../../config.php');
-        }
-
-        return $config;
     }
 
     private function createBreadcrumbs($requestPathArray, $wikiName) {
