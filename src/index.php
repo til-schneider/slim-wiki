@@ -7,7 +7,8 @@ function init() {
     // into $appPath          example: '/slim-wiki'
     // and $requestPathArray  example: array('myfolder', 'mypage')
 
-    $uriPathArray    = explode("/", parse_url($_SERVER['REQUEST_URI'])['path']);
+    $uriParts        = parse_url($_SERVER['REQUEST_URI']);
+    $uriPathArray    = explode("/", $uriParts['path']);
     $scriptPathArray = explode("/", dirname($_SERVER['SCRIPT_NAME']));
 
     $basePathArray = array();
@@ -36,7 +37,7 @@ function init() {
 
     require_once __DIR__ . '/server/logic/Main.php';
 
-    Main::get()->dispatch($baseUrl, $basePath, $requestPathArray);
+    Main::get()->dispatch($baseUrl, $basePath, $requestPathArray, $uriParts['query']);
 }
 
 init();

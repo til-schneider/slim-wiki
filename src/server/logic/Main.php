@@ -21,14 +21,15 @@ class Main {
     }
 
     // Parameters:
-    // - $baseUrl:          E.g. 'http://localhost/slim-wiki/'
+    // - $baseUrl:          E.g. 'http://localhost/slim-wiki/?edit'
     // - $basePath:         E.g. '/slim-wiki/'
     // - $requestPathArray: E.g. array('myfolder', 'mypage')
-    public function dispatch($baseUrl, $basePath, $requestPathArray) {
+    // - $requestQuery:     E.g. 'edit'
+    public function dispatch($baseUrl, $basePath, $requestPathArray, $requestQuery) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->handlePost($requestPathArray);
         } else {
-            $this->handleGet($baseUrl, $basePath, $requestPathArray);
+            $this->handleGet($baseUrl, $basePath, $requestPathArray, $requestQuery);
         }
     }
 
@@ -71,11 +72,8 @@ class Main {
         }
     }
 
-    private function handleGet($baseUrl, $basePath, $requestPathArray) {
-        $isEditMode = isset($requestPathArray[0]) && $requestPathArray[0] == 'edit';
-        if ($isEditMode) {
-            array_shift($requestPathArray);
-        }
+    private function handleGet($baseUrl, $basePath, $requestPathArray, $requestQuery) {
+        $isEditMode = $requestQuery == 'edit';
 
         $articleFilename = $this->getArticleFilename($requestPathArray);
         if ($articleFilename == null) {

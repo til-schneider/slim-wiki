@@ -46,7 +46,7 @@
         if ($item['active']) {
           echo $item['name'];
         } else {
-          ?><a href="<?php echo $data['basePath'] . ($data['isEditMode'] ? 'edit/' : '') . $item['path']; ?>"><?php echo $item['name']; ?></a><?php
+          ?><a href="<?php echo $data['basePath'] . $item['path'] . ($data['isEditMode'] ? '?edit' : ''); ?>"><?php echo $item['name']; ?></a><?php
         }
         $isFirst = false;
       }
