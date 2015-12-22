@@ -18,6 +18,7 @@
     });
 
     editor.on('changes', onEditorChange);
+    editor.on('scroll', onEditorScroll)
   }
 
   function onEditorChange() {
@@ -47,6 +48,15 @@
         })
       }, updatePreviewDelay);
     }
+  }
+
+  function onEditorScroll() {
+    // Synchronize scroll position of preview when editor is scrolled
+    var scrollInfo = editor.getScrollInfo(),
+        scrollFactor = scrollInfo.top / (scrollInfo.height - scrollInfo.clientHeight),
+        bodyElem = document.body;
+
+    window.scrollTo(0, scrollFactor * (bodyElem.scrollHeight - bodyElem.clientHeight));
   }
 
   function callRpc(objectName, methodName, paramArray, done) {
