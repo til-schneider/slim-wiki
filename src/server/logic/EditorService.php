@@ -13,7 +13,32 @@ class EditorService {
         return ($methodName == 'saveArticle' || $methodName == 'createUserConfig');
     }
 
+    // Returns one of: 'logged-in', 'no-credentials', 'wrong-credentials'
+    public function getLoginState() {
+        if (!isset($_SERVER['PHP_AUTH_USER'])) {
+            return 'no-credentials';
+        } else {
+            $userInfo = $this->context->getConfig()['user.' . $_SERVER['PHP_AUTH_USER']];
+            if (isset($userInfo)) {
+                $loginHash = hash($userInfo['type'], $_SERVER['PHP_AUTH_PW'] . $userInfo['salt']);
+                if ($loginHash == $userInfo['hash']) {
+                    return 'logged-in';
+                }
+            }
+
+            return 'wrong-credentials';
+        }
+    }
+
+    public function assertLoggedIn() {
+        if ($this->getLoginState() != 'logged-in') {
+            throw new Exception('Not logged in');
+        }
+    }
+
     public function saveArticle($articleFilename, $markdownText) {
+        $this->assertLoggedIn();
+
         if (! $this->context->isValidArticleFilename($articleFilename)) {
             throw new Exception("Invalid article filename: '$articleFilename'");
         }

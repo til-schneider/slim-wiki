@@ -79,6 +79,17 @@ class Main {
             $mode = 'view';
         }
 
+        if ($mode == 'edit') {
+            $loginState = $this->context->getEditorService()->getLoginState();
+            if ($loginState != 'logged-in') {
+                $wikiName = $this->context->getConfig()['wikiName'];
+                header('WWW-Authenticate: Basic realm="'.$wikiName.'"');
+                header('HTTP/1.0 401 Unauthorized');
+
+                $mode = 'view';
+            }
+        }
+
         $articleFilename = $this->getArticleFilename($requestPathArray);
         if ($articleFilename == null) {
             header('HTTP/1.0 404 Not Found');
