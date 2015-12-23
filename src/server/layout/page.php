@@ -38,7 +38,8 @@ $mode = $data['mode'];
 if ($mode == 'edit') {
 ?><div id="editor-wrapper">
   <textarea id="editor"><?php echo str_replace('<', '&lt;', $data['articleMarkdown']); ?></textarea>
-</div><?php
+</div>
+<div class="close-edit-mode"><a class="btn btn-default" href="<?php echo $data['requestPath']; ?>">X</a></div><?php
 } // if ($mode == 'edit')
 
 ?>
@@ -59,6 +60,12 @@ if ($mode == 'edit') {
       }
       $isFirst = false;
     }
+    if ($data['showCreateUserButton']) {
+      ?><a class="btn btn-default btn-xs pull-right" href="<?php echo $data['requestPath']; ?>?createUser"><?php echo $i18n['button.createUser']; ?></a><?php
+    }
+    if ($mode == 'view') {
+      ?><a class="btn btn-default btn-xs pull-right" href="<?php echo $data['requestPath']; ?>?edit"><?php echo $i18n['button.edit']; ?></a><?php
+    }
   ?></div></nav>
   <article id="content" class="markdown main-column"><?php echo $data['articleHtml']; ?></article>
   <?php
@@ -76,6 +83,7 @@ if ($mode == 'edit') {
       <input type="password" class="form-control" id="password" placeholder="<?php echo $i18n['createUser.password']; ?>">
     </div>
     <button id="showConfigBtn" class="btn btn-primary"><?php echo $i18n['createUser.showConfig']; ?></button>
+    <a class="btn btn-default pull-right" href="<?php echo $data['requestPath']; ?>"><?php echo $i18n['button.cancel']; ?></a>
     <div id="result-box" class="markdown">
       <?php echo $i18n['createUser.addToConfig']; ?>
       <pre><code id="result"></code></pre>

@@ -73,10 +73,13 @@ class Main {
     }
 
     private function handleGet($baseUrl, $basePath, $requestPathArray, $requestQuery) {
+        $showCreateUserButton = false;
         if ($requestQuery == 'edit' || $requestQuery == 'createUser') {
             $mode = $requestQuery;
+            $showCreateUserButton = ($mode == 'edit');
         } else {
             $mode = 'view';
+            $showCreateUserButton = ! $this->isUserDefined();
         }
 
         if ($mode == 'edit') {
@@ -87,6 +90,7 @@ class Main {
                 header('HTTP/1.0 401 Unauthorized');
 
                 $mode = 'view';
+                $showCreateUserButton = true;
             }
         }
 
@@ -108,7 +112,9 @@ class Main {
             }
 
             $data['breadcrumbs'] = $this->createBreadcrumbs($requestPathArray, $config['wikiName']);
+            $data['showCreateUserButton'] = $showCreateUserButton;
 
+            $data['requestPath'] = implode('/', $requestPathArray);
             $data['articleFilename'] = $articleFilename;
             $articleMarkdown = file_get_contents($this->context->getArticleBaseDir() . $articleFilename);
             $data['articleMarkdown'] = $articleMarkdown;
@@ -116,6 +122,16 @@ class Main {
 
             $this->renderPage($data);
         }
+    }
+
+    private function isUserDefined() {
+        $config = $this->context->getConfig();
+        foreach ($config as $key => $value) {
+            if (strpos($key, 'user.') === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function getArticleFilename($requestPathArray) {
