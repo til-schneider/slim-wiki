@@ -10,7 +10,7 @@ class EditorService {
     }
 
     public function isRpcMethod($methodName) {
-        return ($methodName == 'saveArticle');
+        return ($methodName == 'saveArticle' || $methodName == 'createUserConfig');
     }
 
     public function saveArticle($articleFilename, $markdownText) {
@@ -40,6 +40,14 @@ class EditorService {
         gzclose($fp);
 
         return $this->context->getRenderService()->renderMarkdown($markdownText, true);
+    }
+
+    public function createUserConfig($user, $pass) {
+        $type = 'sha256';
+        $salt = uniqid(mt_rand(), true);
+        $hash = hash($type, $pass . $salt);
+
+        return "\$config['user.".strtolower($user)."'] = array('type' => '$type', 'salt' => '$salt', 'hash' => '$hash');";
     }
 
 }

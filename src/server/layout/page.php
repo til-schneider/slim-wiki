@@ -1,4 +1,8 @@
-<!doctype html>
+<?php
+
+$mode = $data['mode'];
+
+?><!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -9,12 +13,12 @@
 
   <base href="<?php echo $data['baseUrl']; ?>">
 
-  <?php if ($data['isEditMode']) { ?>
+  <?php if ($mode == 'edit') { ?>
   <!-- build:css client/edit.css -->
   <link href="client/libs/CodeMirror/lib/codemirror.css" rel="stylesheet">
   <link href="client/libs/CodeMirror/theme/railscasts.css" rel="stylesheet">
   <!-- endbuild -->
-  <?php } // if $data['isEditMode'] ?>
+  <?php } // if ($mode == 'edit') ?>
 
   <!-- build:css client/view.css -->
   <!--
@@ -28,50 +32,77 @@
   <!-- endbuild -->
 
 </head>
-<body<?php echo $data['isEditMode'] ? ' class="edit-mode"' : '' ?>>
-  <?php
-  if ($data['isEditMode']) {
-    ?><div id="editor-wrapper">
-      <textarea id="editor"><?php echo str_replace('<', '&lt;', $data['articleMarkdown']); ?></textarea>
-    </div><?php
-  }
-  ?>
-  <div id="main-wrapper">
-    <nav class="breadcrumbs"><div class="main-column"><?php
-      $isFirst = true;
-      foreach ($data['breadcrumbs'] as $item) {
-        if (! $isFirst) {
-          echo ' / ';
-        }
-        if ($item['active']) {
-          echo $item['name'];
-        } else {
-          ?><a href="<?php echo $data['basePath'] . $item['path'] . ($data['isEditMode'] ? '?edit' : ''); ?>"><?php echo $item['name']; ?></a><?php
-        }
-        $isFirst = false;
-      }
-    ?></div></nav>
-    <article id="content" class="markdown main-column"><?php echo $data['articleHtml']; ?></article>
-    <?php
-    if (isset($data['footerHtml'])) {
-      ?><footer><div class="main-column"><?php echo $data['footerHtml']; ?></div></footer><?php
-    }
-   ?>
-  </div>
-</body>
+<body class="mode-<?php echo $mode; ?>">
 
-<?php if ($data['isEditMode']) { ?>
+<?php
+if ($mode == 'edit') {
+?><div id="editor-wrapper">
+  <textarea id="editor"><?php echo str_replace('<', '&lt;', $data['articleMarkdown']); ?></textarea>
+</div><?php
+} // if ($mode == 'edit')
+
+?>
+<div id="main-wrapper"><?php
+
+  if ($mode == 'view' || $mode == 'edit') {
+  ?>
+  <nav class="breadcrumbs"><div class="main-column"><?php
+    $isFirst = true;
+    foreach ($data['breadcrumbs'] as $item) {
+      if (! $isFirst) {
+        echo ' / ';
+      }
+      if ($item['active']) {
+        echo $item['name'];
+      } else {
+        ?><a href="<?php echo $data['basePath'] . $item['path'] . (($mode == 'edit') ? '?edit' : ''); ?>"><?php echo $item['name']; ?></a><?php
+      }
+      $isFirst = false;
+    }
+  ?></div></nav>
+  <article id="content" class="markdown main-column"><?php echo $data['articleHtml']; ?></article>
+  <?php
+  } // if ($mode == 'view' || $mode == 'edit')
+
+  if ($mode == 'createUser') {
+  ?>
+  <form onsubmit="return false">
+    <div class="form-group">
+      <label for="user"><?php echo $i18n['createUser.userName']; ?></label>
+      <input type="text" class="form-control" id="user" placeholder="<?php echo $i18n['createUser.userName']; ?>">
+    </div>
+    <div class="form-group">
+      <label for="password"><?php echo $i18n['createUser.password']; ?></label>
+      <input type="password" class="form-control" id="password" placeholder="<?php echo $i18n['createUser.password']; ?>">
+    </div>
+    <button id="showConfigBtn" class="btn btn-primary"><?php echo $i18n['createUser.showConfig']; ?></button>
+    <div id="result-box" class="markdown">
+      <?php echo $i18n['createUser.addToConfig']; ?>
+      <pre><code id="result"></code></pre>
+    </div>
+  </form>
+  <?php
+  } // if ($mode == 'createUser')
+
+  if (isset($data['footerHtml'])) {
+    ?><footer><div class="main-column"><?php echo $data['footerHtml']; ?></div></footer><?php
+  }
+
+?></div><?php // id="main-wrapper" ?>
 
 <script type="text/javascript">
   window.slimwiki = <?php
-    echo json_encode(array(
-      "settings" => array(
-        "articleFilename" => $data['articleFilename']
-      )
-    ));
+    $settings = array(
+      "mode" => $mode
+    );
+    if ($mode == 'edit') {
+      $settings['articleFilename'] = $data['articleFilename'];
+    }
+    echo json_encode(array( "settings" => $settings ));
   ?>;
 </script>
 
+<?php if ($mode == 'edit') { ?>
 <!-- build:js client/edit.js -->
 <script src="client/libs/CodeMirror/lib/codemirror.js"></script>
 <script src="client/libs/CodeMirror/addon/mode/overlay.js"></script> <!-- Allow language-in-language -->
@@ -89,7 +120,7 @@
 
 <script src="client/js/app-edit.js"></script>
 <!-- endbuild -->
-<?php } // if $data['isEditMode'] ?>
+<?php } // if ($mode == 'edit') ?>
 
 <!-- build:js client/view.js -->
 <script src="client/libs/highlightjs/highlight.pack.js"></script>
@@ -97,4 +128,5 @@
 <script src="client/js/app-view.js"></script>
 <!-- endbuild -->
 
+</body>
 </html>

@@ -1,7 +1,6 @@
-(function(window, document, console, CodeMirror) {
+(function(window, document, slimwiki, console, CodeMirror) {
 
-  var slimwiki = window.slimwiki,
-      editor,
+  var editor,
       updatePreviewDelay = 1000,
       updatePreviewTimeout = null,
       updatePreviewRunning = false,
@@ -31,7 +30,7 @@
         updatePreviewRunning = true;
         var start = new Date().getTime(),
             articleFilename = slimwiki.settings.articleFilename;
-        callRpc('editor', 'saveArticle', [ articleFilename, editor.getValue() ], function(result, error) {
+        slimwiki.Util.callRpc('editor', 'saveArticle', [ articleFilename, editor.getValue() ], function(result, error) {
           updatePreviewRunning = false;
 
           if (error) {
@@ -59,34 +58,6 @@
     window.scrollTo(0, scrollFactor * (bodyElem.scrollHeight - bodyElem.clientHeight));
   }
 
-  function callRpc(objectName, methodName, paramArray, done) {
-    var request = new XMLHttpRequest(),
-        requestJson;
-
-    request.open('POST', 'rpc/' + objectName, true);
-    request.onreadystatechange = function () {
-      if (request.readyState == 4) {
-        if (request.status != 200) {
-          done(null, 'Request failed with status ' + request.status);
-        } else {
-          try {
-            var responseJson = JSON.parse(request.responseText);
-            if (responseJson.error) {
-              done(null, 'Request failed on server-side: ' + responseJson.error.message);
-            } else {
-              done(responseJson.result);
-            }
-          } catch (err) {
-            done(null, 'Request failed: ' + err);
-          }
-        }
-      }
-    };
-
-    requestJson = { jsonrpc: '2.0', method: methodName, params: paramArray || [], id: 1 };
-    request.send(JSON.stringify(requestJson));
-  }
-
   init();
 
-})(window, document, console, CodeMirror);
+})(window, document, slimwiki, console, CodeMirror);

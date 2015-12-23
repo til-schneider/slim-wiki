@@ -11,7 +11,7 @@ html, body {
   position: relative;
   min-height: 100%;
 
-  .edit-mode & {
+  .mode-edit & {
     position: absolute;
     top: 0;
     right: 0;
@@ -19,7 +19,7 @@ html, body {
   }
 }
 
-.edit-mode {
+.mode-edit {
   #editor-wrapper {
     position: fixed;
     top: 0;
@@ -42,7 +42,7 @@ html, body {
   width: @contentMaxWidth;
   margin: 0 auto;
 
-  .edit-mode & {
+  .mode-edit & {
     width: auto;
     margin: 0 @contentMinMarginX;
   }
@@ -59,7 +59,7 @@ html, body {
   top: 0;
   width: 100%;
 
-  .edit-mode & {
+  .mode-edit & {
     width: 50%;
   }
 }
@@ -73,4 +73,11 @@ footer {
   left: 0;
   bottom: 0;
   width: 100%;
+}
+
+.mode-createUser {
+  form {
+    width: 600px;
+    margin: 100px auto;
+  }
 }

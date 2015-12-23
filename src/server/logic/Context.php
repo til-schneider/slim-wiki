@@ -3,6 +3,7 @@
 class Context {
 
     private $config;
+    private $i18n;
 
     private $articleBaseDir;
     private $dataBaseDir;
@@ -26,7 +27,8 @@ class Context {
         // Defaults
         $config = array(
             'wikiName' => 'Slim Wiki',
-            'timezone' => 'Europe/Berlin'
+            'timezone' => 'Europe/Berlin',
+            'lang'     => 'en'
         );
 
         if (file_exists(__DIR__ . '/../../config.php')) {
@@ -35,6 +37,18 @@ class Context {
 
         $this->config = $config;
         return $config;
+    }
+
+    public function getI18n() {
+        if (! is_null($this->i18n)) {
+            return $this->i18n;
+        }
+
+        $lang = $this->getConfig()['lang'];
+        include(__DIR__ . "/../i18n/$lang.php");
+
+        $this->i18n = $i18n;
+        return $i18n;
     }
 
     public function getArticleBaseDir() {

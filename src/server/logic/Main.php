@@ -73,7 +73,11 @@ class Main {
     }
 
     private function handleGet($baseUrl, $basePath, $requestPathArray, $requestQuery) {
-        $isEditMode = $requestQuery == 'edit';
+        if ($requestQuery == 'edit' || $requestQuery == 'createUser') {
+            $mode = $requestQuery;
+        } else {
+            $mode = 'view';
+        }
 
         $articleFilename = $this->getArticleFilename($requestPathArray);
         if ($articleFilename == null) {
@@ -86,7 +90,7 @@ class Main {
             $data = array();
             $data['baseUrl']    = $baseUrl;
             $data['basePath']   = $basePath;
-            $data['isEditMode'] = $isEditMode;
+            $data['mode'] = $mode;
 
             foreach (array('wikiName', 'footerHtml') as $key) {
                 $data[$key] = $config[$key];
@@ -97,7 +101,7 @@ class Main {
             $data['articleFilename'] = $articleFilename;
             $articleMarkdown = file_get_contents($this->context->getArticleBaseDir() . $articleFilename);
             $data['articleMarkdown'] = $articleMarkdown;
-            $data['articleHtml'] = $this->context->getRenderService()->renderMarkdown($articleMarkdown, $isEditMode);
+            $data['articleHtml'] = $this->context->getRenderService()->renderMarkdown($articleMarkdown, $mode == 'edit');
 
             $this->renderPage($data);
         }
@@ -153,6 +157,7 @@ class Main {
     private function renderPage($data) {
         header('Content-Type:text/html; charset=utf-8');
 
+        $i18n = $this->context->getI18n();
         include(__DIR__ . '/../layout/page.php');
     }
 
