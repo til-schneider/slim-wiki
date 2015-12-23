@@ -32,6 +32,7 @@ Build automatically on source changes (watch mode):
 Used libraries
 --------------
 
+- [Bootstrap](http://getbootstrap.com/) - Basic CSS styling
 - [Parsedown](https://github.com/erusev/parsedown/) - PHP markdown parser
 - [highlight.js](https://highlightjs.org/) - JavaScript syntax highlighter
 - [CodeMirror](https://codemirror.net/) - JavaScript in-browser code editor

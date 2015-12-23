@@ -1,29 +1,4 @@
 
-// Reset browser sizes
-
-//ol, ul, li,
-html, body, div, span, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, img, b, u, i, form, label, table, tbody, tfoot, thead, tr, th, td {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  font-size: 100%;
-  vertical-align: baseline;
-  background: transparent;
-}
-body {
-  line-height: 1;
-}
-:focus {
- outline: 0;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-// Layout
-
 // We need a variable using brackets here, otherwise less won't calculate the width
 // See: https://github.com/less/less.js/issues/1903
 @small-screen-breakpoint: (@contentMaxWidth + 2 * @contentMinMarginX);
@@ -47,7 +22,6 @@ html, body {
 .edit-mode {
   #editor-wrapper {
     position: fixed;
-    box-sizing: border-box;
     top: 0;
     left: 0;
     bottom: 0;

@@ -2,6 +2,7 @@
   "name": "slim-wiki",
   "version": "0.0.0",
   "dependencies": {
+    "bootstrap": "3.3.5",
     "highlightjs": "9.0.0",
     "CodeMirror": "5.10.0"
   }
