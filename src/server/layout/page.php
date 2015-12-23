@@ -9,7 +9,13 @@ $mode = $data['mode'];
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
 
-  <title><?php echo $data['wikiName']; ?></title>
+  <title><?php
+    if (count($data['breadcrumbs']) > 1) {
+      // Show page name in title
+      echo end($data['breadcrumbs'])['name'] . ' &middot; ';
+    }
+    echo $data['wikiName'];
+  ?></title>
 
   <base href="<?php echo $data['baseUrl']; ?>">
 
