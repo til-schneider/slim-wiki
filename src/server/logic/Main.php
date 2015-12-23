@@ -147,13 +147,14 @@ class Main {
         $pathCount = count($requestPathArray);
         $breadcrumbArray = array(array('name' => $wikiName, 'path' => '', 'active' => ($pathCount == 0)));
 
+        $articleBaseDir = $this->context->getArticleBaseDir();
         $currentPath = '';
         for ($i = 0; $i < $pathCount; $i++) {
             $pathPart = $requestPathArray[$i];
             $currentPath .= ($i == 0 ? '' : '/') . $pathPart;
             $isLast = ($i == $pathCount - 1);
 
-            if ($isLast || file_exists($this->articleBaseDir . $currentPath . '/index.md')) {
+            if ($isLast || file_exists($articleBaseDir . $currentPath . '/index.md')) {
                 // This is the requested file or an directory having an index -> Add it
                 $breadcrumbArray[] = array(
                     'name' => str_replace('_', ' ', $pathPart),
