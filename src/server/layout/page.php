@@ -65,8 +65,8 @@ if ($mode != 'view') {
     <a class="btn btn-default" href="<?php echo $data['requestPath']; ?>"><?php echo $i18n['button.back']; ?></a>
   </div><?php
 
-  if ($mode != 'error') { ?>
-    <script type="text/javascript">
+  if ($mode != 'error') {
+    ?><script type="text/javascript">
       (function() {
         var errElem = document.getElementById('fatal-error-message');
         if (slimwiki.supportedBrowser) {
@@ -76,78 +76,75 @@ if ($mode != 'view') {
         }
       })();
     </script>
-    <div id="error-alert"><div class="alert alert-warning"><?php echo $i18n['error.errorLogged']; ?></div></div>
-  <?php
+    <div id="error-alert"><div class="alert alert-warning"><?php echo $i18n['error.errorLogged']; ?></div></div><?php
   }
 }
 
 if ($mode == 'edit') {
-?><div id="editor-wrapper">
-  <textarea id="editor"><?php echo str_replace('<', '&lt;', $data['articleMarkdown']); ?></textarea>
-</div>
-<script type="text/javascript">
-  if (slimwiki.supportedBrowser) {
-    document.getElementById('editor-wrapper').style.display = 'block';
-  }
-</script>
-<div id="close-edit-mode"><a class="btn btn-default" href="<?php echo $data['requestPath']; ?>">X</a></div><?php
+  ?><div id="editor-wrapper">
+    <textarea id="editor"><?php echo str_replace('<', '&lt;', $data['articleMarkdown']); ?></textarea>
+  </div>
+  <script type="text/javascript">
+    if (slimwiki.supportedBrowser) {
+      document.getElementById('editor-wrapper').style.display = 'block';
+    }
+  </script>
+  <div id="close-edit-mode"><a class="btn btn-default" href="<?php echo $data['requestPath']; ?>">X</a></div><?php
 } // if ($mode == 'edit')
 
 ?>
 <div id="main-wrapper"><?php
+
   if ($mode == 'edit') {
     ?><script type="text/javascript">
       if (slimwiki.supportedBrowser) {
         document.getElementById('main-wrapper').style.display = 'block';
       }
-    </script><?php
+    </script>
+    <?php
   }
 
   if ($mode == 'view' || $mode == 'edit') {
-  ?>
-  <nav class="breadcrumbs"><div class="main-column"><?php
-    $isFirst = true;
-    foreach ($data['breadcrumbs'] as $item) {
-      if (! $isFirst) {
-        echo ' / ';
+    ?><nav class="breadcrumbs"><div class="main-column"><?php
+      $isFirst = true;
+      foreach ($data['breadcrumbs'] as $item) {
+        if (! $isFirst) {
+          echo ' / ';
+        }
+        if ($item['active']) {
+          echo $item['name'];
+        } else {
+          ?><a href="<?php echo $data['basePath'] . $item['path'] . (($mode == 'edit') ? '?edit' : ''); ?>"><?php echo $item['name']; ?></a><?php
+        }
+        $isFirst = false;
       }
-      if ($item['active']) {
-        echo $item['name'];
-      } else {
-        ?><a href="<?php echo $data['basePath'] . $item['path'] . (($mode == 'edit') ? '?edit' : ''); ?>"><?php echo $item['name']; ?></a><?php
+      if ($data['showCreateUserButton']) {
+        ?><a class="btn btn-default btn-xs pull-right" href="<?php echo $data['requestPath']; ?>?createUser"><?php echo $i18n['button.createUser']; ?></a><?php
       }
-      $isFirst = false;
-    }
-    if ($data['showCreateUserButton']) {
-      ?><a class="btn btn-default btn-xs pull-right" href="<?php echo $data['requestPath']; ?>?createUser"><?php echo $i18n['button.createUser']; ?></a><?php
-    }
-    if ($mode == 'view') {
-      ?><a class="btn btn-default btn-xs pull-right" href="<?php echo $data['requestPath']; ?>?edit"><?php echo $i18n['button.edit']; ?></a><?php
-    }
-  ?></div></nav>
-  <article id="content" class="markdown main-column"><?php echo $data['articleHtml']; ?></article>
-  <?php
+      if ($mode == 'view') {
+        ?><a class="btn btn-default btn-xs pull-right" href="<?php echo $data['requestPath']; ?>?edit"><?php echo $i18n['button.edit']; ?></a><?php
+      }
+    ?></div></nav>
+    <article id="content" class="markdown main-column"><?php echo $data['articleHtml']; ?></article><?php
   } // if ($mode == 'view' || $mode == 'edit')
 
   if ($mode == 'createUser') {
-  ?>
-  <form id="create-user-box" onsubmit="return false">
-    <div class="form-group">
-      <label for="user"><?php echo $i18n['createUser.userName']; ?></label>
-      <input type="text" class="form-control" id="user" placeholder="<?php echo $i18n['createUser.userName']; ?>">
-    </div>
-    <div class="form-group">
-      <label for="password"><?php echo $i18n['createUser.password']; ?></label>
-      <input type="password" class="form-control" id="password" placeholder="<?php echo $i18n['createUser.password']; ?>">
-    </div>
-    <button id="showConfigBtn" class="btn btn-primary"><?php echo $i18n['createUser.showConfig']; ?></button>
-    <a class="btn btn-default pull-right" href="<?php echo $data['requestPath']; ?>"><?php echo $i18n['button.cancel']; ?></a>
-    <div id="result-box" class="markdown">
-      <?php echo $i18n['createUser.addToConfig']; ?>
-      <pre><code id="result"></code></pre>
-    </div>
-  </form>
-  <?php
+    ?><form id="create-user-box" onsubmit="return false">
+      <div class="form-group">
+        <label for="user"><?php echo $i18n['createUser.userName']; ?></label>
+        <input type="text" class="form-control" id="user" placeholder="<?php echo $i18n['createUser.userName']; ?>">
+      </div>
+      <div class="form-group">
+        <label for="password"><?php echo $i18n['createUser.password']; ?></label>
+        <input type="password" class="form-control" id="password" placeholder="<?php echo $i18n['createUser.password']; ?>">
+      </div>
+      <button id="showConfigBtn" class="btn btn-primary"><?php echo $i18n['createUser.showConfig']; ?></button>
+      <a class="btn btn-default pull-right" href="<?php echo $data['requestPath']; ?>"><?php echo $i18n['button.cancel']; ?></a>
+      <div id="result-box" class="markdown">
+        <?php echo $i18n['createUser.addToConfig']; ?>
+        <pre><code id="result"></code></pre>
+      </div>
+    </form><?php
   } // if ($mode == 'createUser')
 
   if (isset($data['footerHtml'])) {
@@ -158,29 +155,29 @@ if ($mode == 'edit') {
 
 <?php if ($mode == 'edit' || $mode == 'createUser') { ?>
 <!-- build:js client/edit.js -->
-<script src="client/libs/CodeMirror/lib/codemirror.js"></script>
-<script src="client/libs/CodeMirror/addon/mode/overlay.js"></script> <!-- Allow language-in-language -->
-<script src="client/libs/CodeMirror/mode/markdown/markdown.js"></script>
-<script src="client/libs/CodeMirror/mode/gfm/gfm-patched.js"></script>
+  <script src="client/libs/CodeMirror/lib/codemirror.js"></script>
+  <script src="client/libs/CodeMirror/addon/mode/overlay.js"></script> <!-- Allow language-in-language -->
+  <script src="client/libs/CodeMirror/mode/markdown/markdown.js"></script>
+  <script src="client/libs/CodeMirror/mode/gfm/gfm-patched.js"></script>
 
-<!-- Nested languages -->
-<script src="client/libs/CodeMirror/mode/clike/clike.js"></script>
-<script src="client/libs/CodeMirror/mode/css/css.js"></script>
-<script src="client/libs/CodeMirror/mode/htmlmixed/htmlmixed.js"></script>
-<script src="client/libs/CodeMirror/mode/javascript/javascript.js"></script>
-<script src="client/libs/CodeMirror/mode/xml/xml.js"></script>
+  <!-- Nested languages -->
+  <script src="client/libs/CodeMirror/mode/clike/clike.js"></script>
+  <script src="client/libs/CodeMirror/mode/css/css.js"></script>
+  <script src="client/libs/CodeMirror/mode/htmlmixed/htmlmixed.js"></script>
+  <script src="client/libs/CodeMirror/mode/javascript/javascript.js"></script>
+  <script src="client/libs/CodeMirror/mode/xml/xml.js"></script>
 
-<script src="client/libs/CodeMirror/mode/meta.js"></script>
+  <script src="client/libs/CodeMirror/mode/meta.js"></script>
 
-<script src="client/js/app-edit.js"></script>
+  <script src="client/js/app-edit.js"></script>
 <!-- endbuild -->
 <?php } // if ($mode == 'edit' || $mode == 'createUser') ?>
 
 <?php if ($mode != 'error') { ?>
 <!-- build:js client/view.js -->
-<script src="client/libs/highlightjs/highlight.pack.js"></script>
+  <script src="client/libs/highlightjs/highlight.pack.js"></script>
 
-<script src="client/js/app-view.js"></script>
+  <script src="client/js/app-view.js"></script>
 <!-- endbuild -->
 <?php } // if ($mode != 'error') ?>
 
