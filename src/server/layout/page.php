@@ -61,19 +61,24 @@ $mode = $data['mode'];
 if ($mode != 'view') {
   // Show an error message if JavaScript is off or if the browser is not supported.
   // NOTE: In view mode we don't show an error. Instead, syntax highlighting will be off for unsupported browsers.
-  ?><div id="fatal-error-message"><div><?php echo $i18n['error.noJavaScript']; ?></div><a class="btn btn-default" href="<?php echo $data['requestPath']; ?>"><?php echo $i18n['button.back']; ?></a></div>
-  <script type="text/javascript">
-    (function() {
-      var errElem = document.getElementById('fatal-error-message');
-      if (slimwiki.supportedBrowser) {
-        errElem.parentNode.removeChild(errElem);
-      } else {
-        errElem.firstChild.innerHTML = <?php echo json_encode($i18n['error.browserNotSupported']); ?>;
-      }
-    })();
-  </script>
-  <div id="error-alert"><div class="alert alert-warning"><?php echo $i18n['error.errorLogged']; ?></div></div>
+  ?><div id="fatal-error-message"><div><?php echo ($mode == 'error') ? $data['fatalErrorMessage'] : $i18n['error.noJavaScript']; ?></div>
+    <a class="btn btn-default" href="<?php echo $data['requestPath']; ?>"><?php echo $i18n['button.back']; ?></a>
+  </div><?php
+
+  if ($mode != 'error') { ?>
+    <script type="text/javascript">
+      (function() {
+        var errElem = document.getElementById('fatal-error-message');
+        if (slimwiki.supportedBrowser) {
+          errElem.parentNode.removeChild(errElem);
+        } else {
+          errElem.firstChild.innerHTML = <?php echo json_encode($i18n['error.browserNotSupported']); ?>;
+        }
+      })();
+    </script>
+    <div id="error-alert"><div class="alert alert-warning"><?php echo $i18n['error.errorLogged']; ?></div></div>
   <?php
+  }
 }
 
 if ($mode == 'edit') {
@@ -151,7 +156,7 @@ if ($mode == 'edit') {
 
 ?></div><?php // id="main-wrapper" ?>
 
-<?php if ($mode != 'view') { ?>
+<?php if ($mode == 'edit' || $mode == 'createUser') { ?>
 <!-- build:js client/edit.js -->
 <script src="client/libs/CodeMirror/lib/codemirror.js"></script>
 <script src="client/libs/CodeMirror/addon/mode/overlay.js"></script> <!-- Allow language-in-language -->
@@ -169,13 +174,15 @@ if ($mode == 'edit') {
 
 <script src="client/js/app-edit.js"></script>
 <!-- endbuild -->
-<?php } // if ($mode != 'view') ?>
+<?php } // if ($mode == 'edit' || $mode == 'createUser') ?>
 
+<?php if ($mode != 'error') { ?>
 <!-- build:js client/view.js -->
 <script src="client/libs/highlightjs/highlight.pack.js"></script>
 
 <script src="client/js/app-view.js"></script>
 <!-- endbuild -->
+<?php } // if ($mode != 'error') ?>
 
 </body>
 </html>

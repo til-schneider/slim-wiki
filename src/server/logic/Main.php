@@ -58,8 +58,8 @@ class Main {
                     try {
                         $responseData['result'] = call_user_func_array(array($object, $methodName), $requestData['params']);
                     } catch (Exception $exc) {
-                        $msg = "Calling RPC $objectName.$methodName failed";
-                        error_log($msg . ': ' . $exc->getMessage());
+                        $msg = "Calling RPC $objectName.$methodName failed: " . $exc->getMessage();
+                        error_log($msg);
                         $responseData['error'] = array( 'code' => -32000, 'message' => $msg );
                     }
                 }
@@ -102,10 +102,20 @@ class Main {
         } else {
             $config = $this->context->getConfig();
 
+            $fatalErrorMessage = null;
+            if ($mode == 'edit') {
+                $fatalErrorMessage = $this->context->getEditorService()->checkForError($articleFilename);
+                if ($fatalErrorMessage != null) {
+                    $fatalErrorMessage = $this->context->getI18n()['error.editingArticleFailed'] . '<br/>' . $fatalErrorMessage;
+                    $mode = 'error';
+                }
+            }
+
             $data = array();
             $data['baseUrl']    = $baseUrl;
             $data['basePath']   = $basePath;
             $data['mode'] = $mode;
+            $data['fatalErrorMessage'] = $fatalErrorMessage;
 
             foreach (array('wikiName', 'footerHtml') as $key) {
                 $data[$key] = $config[$key];

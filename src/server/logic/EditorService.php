@@ -36,6 +36,32 @@ class EditorService {
         }
     }
 
+    public function checkForError($articleFilename) {
+        function canWriteFileOrParent($filename) {
+            if ($filename == '') {
+                return false;
+            } else if (file_exists($filename)) {
+                return is_writable($filename);
+            } else {
+                return canWriteFileOrParent(dirname($filename));
+            }
+        }
+
+        $articleFullFilename = $this->context->getArticleBaseDir() . $articleFilename;
+        if (! canWriteFileOrParent($articleFullFilename)) {
+            return $this->context->getI18n()['error.missingWritePermissions.article']
+                . ' <code>' . $articleFullFilename . '</code>';
+        }
+
+        $backupFullFilename = $this->context->getDataBaseDir() . $this->getBackupFilename($articleFilename);
+        if (! canWriteFileOrParent($backupFullFilename)) {
+            return $this->context->getI18n()['error.missingWritePermissions.backup']
+                . ' <code>' . $backupFullFilename . '</code>';
+        }
+
+        return null;
+    }
+
     public function saveArticle($articleFilename, $markdownText) {
         $this->assertLoggedIn();
 
@@ -43,28 +69,38 @@ class EditorService {
             throw new Exception("Invalid article filename: '$articleFilename'");
         }
 
-        // Set timezone
-        $this->context->getConfig();
-
         // Write article file
         $articleFullFilename = $this->context->getArticleBaseDir() . $articleFilename;
         $articleDir = dirname($articleFullFilename);
         if (! file_exists($articleDir)) {
             mkdir($articleDir, 0777, true);
         }
+        if (! is_writable(file_exists($articleFullFilename) ? $articleFullFilename : $articleDir)) {
+            throw new Exception("No write permissions for article file");
+        }
         file_put_contents($articleFullFilename, $markdownText);
 
         // Write backup file (one per day)
-        $backupFullFilename = $this->context->getDataBaseDir() . 'backup/' . $articleFilename . date('_Y-m-d') . '.gz';
+        $backupFullFilename = $this->context->getDataBaseDir() . $this->getBackupFilename($articleFilename);
         $backupDir = dirname($backupFullFilename);
         if (! file_exists($backupDir)) {
             mkdir($backupDir, 0777, true);
+        }
+        if (! is_writable(file_exists($backupFullFilename) ? $backupFullFilename : $backupDir)) {
+            throw new Exception("No write permissions for backup file");
         }
         $fp = gzopen ($backupFullFilename, 'w9');
         gzwrite ($fp, $markdownText);
         gzclose($fp);
 
         return $this->context->getRenderService()->renderMarkdown($markdownText, true);
+    }
+
+    private function getBackupFilename($articleFilename) {
+        // Set timezone
+        $this->context->getConfig();
+
+        return 'backup/' . $articleFilename . date('_Y-m-d') . '.gz';
     }
 
     public function createUserConfig($user, $pass) {
