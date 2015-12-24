@@ -12,6 +12,16 @@
 
 
   function init() {
+    var mode = slimwiki.settings.mode;
+
+    if (mode == 'edit') {
+      initEditMode();
+    } else if (mode == 'createUser') {
+      initCreateUserForm();
+    }
+  }
+
+  function initEditMode() {
     document.getElementById('close-edit-mode').style.display = 'block';
 
     editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
@@ -26,6 +36,27 @@
     editor.on('scroll', onEditorScroll)
   }
 
+  function initCreateUserForm() {
+    document.getElementById('create-user-box').style.display = 'block';
+
+    document.getElementById('showConfigBtn').addEventListener('click', function() {
+      var user = document.getElementById('user').value,
+          pass = document.getElementById('password').value;
+
+      callRpc('editor', 'createUserConfig', [ user, pass ], function(result, error) {
+        if (error) {
+          console.error('Creating user config failed:', error);
+        } else {
+          var resultBoxElem = document.getElementById('result-box');
+          resultBoxElem.style.display = 'block';
+
+          document.getElementById('result').innerHTML = result.replace(/</g, '&lt;');
+          slimwiki.View.updateSyntaxHighlighting(resultBoxElem);
+        }
+      });
+    }, false);
+  }
+
   function onEditorChange() {
     previewIsDirty = true;
     if (! updatePreviewRunning) {
@@ -36,7 +67,7 @@
         updatePreviewRunning = true;
         var start = new Date().getTime(),
             articleFilename = slimwiki.settings.articleFilename;
-        slimwiki.Util.callRpc('editor', 'saveArticle', [ articleFilename, editor.getValue() ], function(result, error) {
+        callRpc('editor', 'saveArticle', [ articleFilename, editor.getValue() ], function(result, error) {
           updatePreviewRunning = false;
 
           if (error) {
@@ -62,6 +93,36 @@
         bodyElem = document.body;
 
     window.scrollTo(0, scrollFactor * (bodyElem.scrollHeight - bodyElem.clientHeight));
+  }
+
+  function callRpc(objectName, methodName, paramArray, done) {
+    var request = new XMLHttpRequest(),
+        requestJson;
+
+    request.open('POST', 'rpc/' + objectName, true);
+    request.onreadystatechange = function () {
+      if (request.readyState == 4) {
+        if (request.status != 200) {
+          done(null, 'Request failed with status ' + request.status);
+        } else {
+          var responseJson;
+          try {
+            responseJson = JSON.parse(request.responseText);
+          } catch (err) {
+            done(null, 'Parsing response failed: ' + err);
+          }
+
+          if (responseJson.error) {
+            done(null, 'Request failed on server-side: ' + responseJson.error.message);
+          } else {
+            done(responseJson.result);
+          }
+        }
+      }
+    };
+
+    requestJson = { jsonrpc: '2.0', method: methodName, params: paramArray || [], id: 1 };
+    request.send(JSON.stringify(requestJson));
   }
 
 })(window, document, slimwiki, console, CodeMirror);

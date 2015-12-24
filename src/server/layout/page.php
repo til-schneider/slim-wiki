@@ -150,7 +150,7 @@ if ($mode == 'edit') {
 
 ?></div><?php // id="main-wrapper" ?>
 
-<?php if ($mode == 'edit') { ?>
+<?php if ($mode != 'view') { ?>
 <!-- build:js client/edit.js -->
 <script src="client/libs/CodeMirror/lib/codemirror.js"></script>
 <script src="client/libs/CodeMirror/addon/mode/overlay.js"></script> <!-- Allow language-in-language -->
@@ -168,7 +168,7 @@ if ($mode == 'edit') {
 
 <script src="client/js/app-edit.js"></script>
 <!-- endbuild -->
-<?php } // if ($mode == 'edit') ?>
+<?php } // if ($mode != 'view') ?>
 
 <!-- build:js client/view.js -->
 <script src="client/libs/highlightjs/highlight.pack.js"></script>
