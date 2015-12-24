@@ -37,19 +37,65 @@ $mode = $data['mode'];
   <link href=".tmp/app-view.css" rel="stylesheet" />
   <!-- endbuild -->
 
+  <script type="text/javascript">
+    window.slimwiki = {
+      <?php // We support IE 9+. We need addEventListener, querySelectorAll and JSON.parse  ?>
+      supportedBrowser: !! document.addEventListener,
+      settings: <?php
+        $settings = array(
+          "mode" => $mode
+        );
+        if ($mode == 'edit') {
+          $settings['articleFilename'] = $data['articleFilename'];
+        }
+        echo json_encode($settings);
+      ?>
+    };
+  </script>
+
 </head>
 <body class="mode-<?php echo $mode; ?>">
 
 <?php
+
+if ($mode != 'view') {
+  // Show an error message if JavaScript is off or if the browser is not supported.
+  // NOTE: In view mode we don't show an error. Instead, syntax highlighting will be off for unsupported browsers.
+  ?><div id="fatal-error-message"><div><?php echo $i18n['error.noJavaScript']; ?></div><a class="btn btn-default" href="<?php echo $data['requestPath']; ?>"><?php echo $i18n['button.back']; ?></a></div>
+  <script type="text/javascript">
+    (function() {
+      var errElem = document.getElementById('fatal-error-message');
+      if (slimwiki.supportedBrowser) {
+        errElem.parentNode.removeChild(errElem);
+      } else {
+        errElem.firstChild.innerHTML = <?php echo json_encode($i18n['error.browserNotSupported']); ?>;
+      }
+    })();
+  </script>
+  <?php
+}
+
 if ($mode == 'edit') {
 ?><div id="editor-wrapper">
   <textarea id="editor"><?php echo str_replace('<', '&lt;', $data['articleMarkdown']); ?></textarea>
 </div>
-<div class="close-edit-mode"><a class="btn btn-default" href="<?php echo $data['requestPath']; ?>">X</a></div><?php
+<script type="text/javascript">
+  if (slimwiki.supportedBrowser) {
+    document.getElementById('editor-wrapper').style.display = 'block';
+  }
+</script>
+<div id="close-edit-mode"><a class="btn btn-default" href="<?php echo $data['requestPath']; ?>">X</a></div><?php
 } // if ($mode == 'edit')
 
 ?>
 <div id="main-wrapper"><?php
+  if ($mode == 'edit') {
+    ?><script type="text/javascript">
+      if (slimwiki.supportedBrowser) {
+        document.getElementById('main-wrapper').style.display = 'block';
+      }
+    </script><?php
+  }
 
   if ($mode == 'view' || $mode == 'edit') {
   ?>
@@ -79,7 +125,7 @@ if ($mode == 'edit') {
 
   if ($mode == 'createUser') {
   ?>
-  <form onsubmit="return false">
+  <form id="create-user-box" onsubmit="return false">
     <div class="form-group">
       <label for="user"><?php echo $i18n['createUser.userName']; ?></label>
       <input type="text" class="form-control" id="user" placeholder="<?php echo $i18n['createUser.userName']; ?>">
@@ -103,18 +149,6 @@ if ($mode == 'edit') {
   }
 
 ?></div><?php // id="main-wrapper" ?>
-
-<script type="text/javascript">
-  window.slimwiki = <?php
-    $settings = array(
-      "mode" => $mode
-    );
-    if ($mode == 'edit') {
-      $settings['articleFilename'] = $data['articleFilename'];
-    }
-    echo json_encode(array( "settings" => $settings ));
-  ?>;
-</script>
 
 <?php if ($mode == 'edit') { ?>
 <!-- build:js client/edit.js -->

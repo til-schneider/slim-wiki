@@ -1,7 +1,10 @@
 <?php
 
 $i18n = array(
+    'error.noJavaScript' => 'Bitte aktivieren Sie JavaScript in den Einstellungen Ihres Browser um diese Seite verwenden zu können.',
+    'error.browserNotSupported' => 'Ihr Browser wird nicht unterstützt. Bitte verwenden Sie einen aktuellen Browser.',
     'button.cancel' => 'Abbrechen',
+    'button.back' => 'Zurück',
     'button.edit' => 'Bearbeiten',
     'button.createUser' => 'Benutzer erstellen',
     'createUser.userName' => 'Benutzername',

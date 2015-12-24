@@ -7,7 +7,9 @@
     updateSyntaxHighlighting: updateSyntaxHighlighting
   };
 
-  init();
+  if (slimwiki.supportedBrowser) {
+    init();
+  }
 
 
   function init() {
@@ -21,6 +23,8 @@
   }
 
   function initCreateUserForm() {
+    document.getElementById('create-user-box').style.display = 'block';
+
     document.getElementById('showConfigBtn').addEventListener('click', function() {
       var user = document.getElementById('user').value,
           pass = document.getElementById('password').value;

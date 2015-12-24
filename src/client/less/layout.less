@@ -20,7 +20,8 @@ html, body {
 }
 
 .mode-edit {
-  .close-edit-mode {
+  #close-edit-mode {
+    display: none;
     position: fixed;
     top: 0;
     right: 50%;
@@ -31,6 +32,7 @@ html, body {
   }
 
   #editor-wrapper {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -44,6 +46,10 @@ html, body {
   #editor {
     // The textarea is only used by CodeMirror to obtain the source code, the actual editor is placed after the textarea
     // -> We hide the textarea in order to avoid flickering while loading
+    display: none;
+  }
+
+  #main-wrapper {
     display: none;
   }
 }

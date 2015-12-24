@@ -6,8 +6,14 @@
       updatePreviewRunning = false,
       previewIsDirty = false;
 
+  if (slimwiki.supportedBrowser) {
+    init();
+  }
+
 
   function init() {
+    document.getElementById('close-edit-mode').style.display = 'block';
+
     editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
       // Config see: https://codemirror.net/doc/manual.html
       mode: 'gfm',
@@ -57,7 +63,5 @@
 
     window.scrollTo(0, scrollFactor * (bodyElem.scrollHeight - bodyElem.clientHeight));
   }
-
-  init();
 
 })(window, document, slimwiki, console, CodeMirror);
