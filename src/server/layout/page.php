@@ -72,6 +72,7 @@ if ($mode != 'view') {
       }
     })();
   </script>
+  <div id="error-alert"><div class="alert alert-warning"><?php echo $i18n['error.errorLogged']; ?></div></div>
   <?php
 }
 

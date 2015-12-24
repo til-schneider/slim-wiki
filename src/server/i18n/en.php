@@ -3,6 +3,7 @@
 $i18n = array(
     'error.noJavaScript' => 'Please activate JavaScript in the settings of your browser in order to use this site.',
     'error.browserNotSupported' => 'Your browser is not supported. Please use an up-to-date browser.',
+    'error.errorLogged' => 'An error has occurred. Please have a look to the log file.',
     'button.cancel' => 'Cancel',
     'button.back' => 'Back',
     'button.edit' => 'Edit',

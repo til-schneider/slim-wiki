@@ -46,6 +46,7 @@
       callRpc('editor', 'createUserConfig', [ user, pass ], function(result, error) {
         if (error) {
           console.error('Creating user config failed:', error);
+          showErrorLogged();
         } else {
           var resultBoxElem = document.getElementById('result-box');
           resultBoxElem.style.display = 'block';
@@ -72,6 +73,7 @@
 
           if (error) {
             console.error('Saving article failed:', error);
+            showErrorLogged();
           } else {
             document.getElementById('content').innerHTML = result;
             slimwiki.View.updateSyntaxHighlighting();
@@ -123,6 +125,15 @@
 
     requestJson = { jsonrpc: '2.0', method: methodName, params: paramArray || [], id: 1 };
     request.send(JSON.stringify(requestJson));
+  }
+
+  function showErrorLogged() {
+    var errorElem = document.getElementById('error-alert');
+    errorElem.style.display = 'block';
+
+    window.setTimeout(function() {
+      errorElem.style.display = 'none';
+    }, 5000);
   }
 
 })(window, document, slimwiki, console, CodeMirror);
