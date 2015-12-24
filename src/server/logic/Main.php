@@ -150,7 +150,7 @@ class Main {
 
         // Support `index.md` for directories
         if (is_dir($articleBaseDir . $articleFilename)) {
-            $articleFilename = rtrim($articleFilename, '/') . '/index.md';
+            $articleFilename = ltrim($articleFilename . '/index.md', '/');
         }
 
         // Make the extension `.md` optional
