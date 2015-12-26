@@ -19,6 +19,8 @@ $mode = $data['mode'];
 
   <base href="<?php echo $data['baseUrl']; ?>">
 
+  <link href="client/img/favicon-32.png" rel="shortcut icon" />
+
   <?php if ($mode == 'edit') { ?>
   <!-- build:css client/edit.css -->
   <link href="client/libs/CodeMirror/lib/codemirror.css" rel="stylesheet">
