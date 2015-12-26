@@ -75,7 +75,7 @@ class Context {
     public function getRenderService() {
         if (is_null($this->renderService)) {
             require_once __DIR__ . '/RenderService.php';
-            $this->renderService = new RenderService();
+            $this->renderService = new RenderService($this);
         }
         return $this->renderService;
     }

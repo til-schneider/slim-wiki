@@ -4,20 +4,11 @@ require_once __DIR__ . '/Context.php';
 
 class Main {
 
-    private static $singleton;
-
     private $context;
 
 
-    private function __construct() {
+    public function __construct() {
         $this->context = new Context();
-    }
-
-    public static function get() {
-        if (is_null(self::$singleton)) {
-            self::$singleton = new self();
-        }
-        return self::$singleton;
     }
 
     // Parameters:
@@ -96,18 +87,28 @@ class Main {
 
         $articleFilename = $this->getArticleFilename($requestPathArray);
         if ($articleFilename == null) {
-            header('HTTP/1.0 404 Not Found');
+            header('HTTP/1.0 403 Forbidden');
             header('Content-Type:text/html; charset=utf-8');
-            echo '<h1>File not found</h1>'; // TODO: Show error page
+            echo '<h1>Forbidden</h1>';
         } else {
             $config = $this->context->getConfig();
 
+            $renderService = $this->context->getRenderService();
+
             $fatalErrorMessage = null;
-            if ($mode == 'edit') {
-                $fatalErrorMessage = $this->context->getEditorService()->checkForError($articleFilename);
+            if ($mode == 'view') {
+                if (! $renderService->articleExists($articleFilename)) {
+                    $mode = 'noSuchArticle';
+                }
+            } else if ($mode == 'edit') {
+                $editorService = $this->context->getEditorService();
+                $fatalErrorMessage = $editorService->checkForError($articleFilename);
                 if ($fatalErrorMessage != null) {
                     $fatalErrorMessage = $this->context->getI18n()['error.editingArticleFailed'] . '<br/>' . $fatalErrorMessage;
                     $mode = 'error';
+                } else if (! $renderService->articleExists($articleFilename)) {
+                    $mode = 'createArticle';
+                    $showCreateUserButton = false;
                 }
             }
 
@@ -121,14 +122,17 @@ class Main {
                 $data[$key] = $config[$key];
             }
 
-            $data['breadcrumbs'] = $this->createBreadcrumbs($requestPathArray, $config['wikiName']);
+            $data['breadcrumbs'] = $this->createBreadcrumbs($requestPathArray);
             $data['showCreateUserButton'] = $showCreateUserButton;
 
             $data['requestPath'] = implode('/', $requestPathArray);
             $data['articleFilename'] = $articleFilename;
-            $articleMarkdown = file_get_contents($this->context->getArticleBaseDir() . $articleFilename);
-            $data['articleMarkdown'] = $articleMarkdown;
-            $data['articleHtml'] = $this->context->getRenderService()->renderMarkdown($articleMarkdown, $mode == 'edit');
+
+            if ($mode == 'view' || $mode == 'edit') {
+                $articleMarkdown = file_get_contents($this->context->getArticleBaseDir() . $articleFilename);
+                $data['articleMarkdown'] = $articleMarkdown;
+                $data['articleHtml'] = $renderService->renderMarkdown($articleMarkdown, $mode == 'edit');
+            }
 
             $this->renderPage($data);
         }
@@ -162,14 +166,13 @@ class Main {
         if (! $this->context->isValidArticleFilename($articleFilename)) {
             // Attempt to break out of article base directory (e.g. `../../outside.ext`)
             return null;
-        } else if (file_exists($articleFullFilename) && is_readable($articleFullFilename)) {
-            return $articleFilename;
         } else {
-            return null;
+            return $articleFilename;
         }
     }
 
-    private function createBreadcrumbs($requestPathArray, $wikiName) {
+    private function createBreadcrumbs($requestPathArray) {
+        $wikiName = $this->context->getConfig()['wikiName'];
         $pathCount = count($requestPathArray);
         $breadcrumbArray = array(array('name' => $wikiName, 'path' => '', 'active' => ($pathCount == 0)));
 

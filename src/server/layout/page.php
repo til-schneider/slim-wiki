@@ -45,7 +45,9 @@ $mode = $data['mode'];
         $settings = array(
           "mode" => $mode
         );
-        if ($mode == 'edit') {
+        if ($mode == 'edit' || $mode == 'createArticle') {
+          $settings['pageTitle'] = end($data['breadcrumbs'])['name'];
+          $settings['requestPath'] = $data['requestPath'];
           $settings['articleFilename'] = $data['articleFilename'];
         }
         echo json_encode($settings);
@@ -61,14 +63,14 @@ $mode = $data['mode'];
 if ($mode != 'view') {
   // Show an error message if JavaScript is off or if the browser is not supported.
   // NOTE: In view mode we don't show an error. Instead, syntax highlighting will be off for unsupported browsers.
-  ?><div id="fatal-error-message"><div><?php echo ($mode == 'error') ? $data['fatalErrorMessage'] : $i18n['error.noJavaScript']; ?></div>
+  ?><div id="jumbo-message"><div><?php echo ($mode == 'error') ? $data['fatalErrorMessage'] : $i18n['error.noJavaScript']; ?></div>
     <a class="btn btn-default" href="<?php echo $data['requestPath']; ?>"><?php echo $i18n['button.back']; ?></a>
   </div><?php
 
   if ($mode != 'error') {
     ?><script type="text/javascript">
       (function() {
-        var errElem = document.getElementById('fatal-error-message');
+        var errElem = document.getElementById('jumbo-message');
         if (slimwiki.supportedBrowser) {
           errElem.parentNode.removeChild(errElem);
         } else {
@@ -104,7 +106,7 @@ if ($mode == 'edit') {
     <?php
   }
 
-  if ($mode == 'view' || $mode == 'edit') {
+  if ($mode == 'view' || $mode == 'edit' || $mode == 'noSuchArticle' || $mode == 'createArticle') {
     ?><nav class="breadcrumbs"><div class="main-column"><?php
       $isFirst = true;
       foreach ($data['breadcrumbs'] as $item) {
@@ -121,12 +123,23 @@ if ($mode == 'edit') {
       if ($data['showCreateUserButton']) {
         ?><a class="btn btn-default btn-xs pull-right" href="<?php echo $data['requestPath']; ?>?createUser"><?php echo $i18n['button.createUser']; ?></a><?php
       }
-      if ($mode == 'view') {
+      if ($mode == 'view' || $mode == 'noSuchArticle') {
         ?><a class="btn btn-default btn-xs pull-right" href="<?php echo $data['requestPath']; ?>?edit"><?php echo $i18n['button.edit']; ?></a><?php
       }
-    ?></div></nav>
-    <article id="content" class="markdown main-column"><?php echo $data['articleHtml']; ?></article><?php
-  } // if ($mode == 'view' || $mode == 'edit')
+    ?></div></nav><?php
+  }
+
+  if ($mode == 'view' || $mode == 'edit') {
+    ?><article id="content" class="markdown main-column"><?php echo $data['articleHtml']; ?></article><?php
+  }
+
+  if ($mode == 'noSuchArticle' || $mode == 'createArticle') {
+    ?><div id="jumbo-message"><div><?php echo $i18n['createArticle.text']; ?></div><?php
+      if ($mode == 'createArticle') {
+        ?><button id="createArticleBtn" class="btn btn-default""><?php echo $i18n['button.createArticle']; ?></button><?php
+      }
+    ?></div><?php
+  }
 
   if ($mode == 'createUser') {
     ?><form id="create-user-box" onsubmit="return false">
@@ -153,7 +166,7 @@ if ($mode == 'edit') {
 
 ?></div><?php // id="main-wrapper" ?>
 
-<?php if ($mode == 'edit' || $mode == 'createUser') { ?>
+<?php if ($mode == 'edit' || $mode == 'createArticle' || $mode == 'createUser') { ?>
 <!-- build:js client/edit.js -->
   <script src="client/libs/CodeMirror/lib/codemirror.js"></script>
   <script src="client/libs/CodeMirror/addon/mode/overlay.js"></script> <!-- Allow language-in-language -->

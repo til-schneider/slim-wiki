@@ -2,6 +2,17 @@
 
 class RenderService {
 
+    private $context;
+
+
+    public function __construct($context) {
+        $this->context = $context;
+    }
+
+    public function articleExists($articleFilename) {
+        return file_exists($this->context->getArticleBaseDir() . $articleFilename);
+    }
+
     public function renderMarkdown($markdownText, $isEditMode) {
         require_once __DIR__ . '/../lib/parsedown/Parsedown.php';
         $html = Parsedown::instance()->text($markdownText);

@@ -10,7 +10,7 @@ class EditorService {
     }
 
     public function isRpcMethod($methodName) {
-        return ($methodName == 'saveArticle' || $methodName == 'createUserConfig');
+        return ($methodName == 'createArticle' || $methodName == 'saveArticle' || $methodName == 'createUserConfig');
     }
 
     // Returns one of: 'logged-in', 'no-credentials', 'wrong-credentials'
@@ -62,6 +62,17 @@ class EditorService {
         return null;
     }
 
+    public function createArticle($articleFilename, $pageTitle) {
+        if (! $this->str_endswith($articleFilename, '.md')) {
+            $articleFilename .= '.md';
+        }
+
+        $markdownText = $pageTitle . "\n" . str_repeat('=', strlen($pageTitle)) . "\n\n"
+            . $this->context->getI18n()['createArticle.content'];
+
+        return $this->saveArticle($articleFilename, $markdownText);
+    }
+
     public function saveArticle($articleFilename, $markdownText) {
         $this->assertLoggedIn();
 
@@ -109,6 +120,13 @@ class EditorService {
         $hash = hash($type, $pass . $salt);
 
         return "\$config['user.".strtolower($user)."'] = array('type' => '$type', 'salt' => '$salt', 'hash' => '$hash');";
+    }
+
+    function str_endswith($string, $test) {
+        $strlen = strlen($string);
+        $testlen = strlen($test);
+        if ($testlen > $strlen) return false;
+        return substr_compare($string, $test, $strlen - $testlen, $testlen) === 0;
     }
 
 }

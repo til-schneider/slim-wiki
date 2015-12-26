@@ -37,7 +37,7 @@ function init() {
 
     require_once __DIR__ . '/server/logic/Main.php';
 
-    Main::get()->dispatch($baseUrl, $basePath, $requestPathArray, $uriParts['query']);
+    (new Main())->dispatch($baseUrl, $basePath, $requestPathArray, $uriParts['query']);
 }
 
 init();

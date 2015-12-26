@@ -16,6 +16,8 @@
 
     if (mode == 'edit') {
       initEditMode();
+    } else if (mode == 'createArticle') {
+      initCreateArticle();
     } else if (mode == 'createUser') {
       initCreateUserForm();
     }
@@ -34,6 +36,21 @@
 
     editor.on('changes', onEditorChange);
     editor.on('scroll', onEditorScroll)
+  }
+
+  function initCreateArticle() {
+    document.getElementById('createArticleBtn').addEventListener('click', function() {
+      var articleFilename = slimwiki.settings.articleFilename,
+          pageTitle = slimwiki.settings.pageTitle;
+      callRpc('editor', 'createArticle', [ articleFilename, pageTitle ], function(result, error) {
+        if (error) {
+          console.error('Creating article failed:', error);
+          showErrorLogged();
+        } else {
+          location.href = slimwiki.settings.requestPath + '?edit';
+        }
+      })
+    });
   }
 
   function initCreateUserForm() {
