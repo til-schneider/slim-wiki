@@ -1,6 +1,6 @@
 /.idea/
 /dist/
 /src/.tmp/
-/src/data/
+/src/data/backup/
 /src/node_modules/
 /src/config.php
