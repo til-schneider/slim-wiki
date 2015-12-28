@@ -24,6 +24,8 @@ Now some inline markup like _italics_,  **bold**, ~~strike through~~ and `code()
 
 ![picture alt](http://nuclearpixel.com/content/icons/2010-02-09_stellar_icons_from_space_from_2005/earth_128.png "Title is optional")
 
+Want to mark something in your article to fix later? Write FIXME. This will create a yellow fixme marker.
+
 > Blockquotes are like quoted text in email replies
 >> And, they can be nested
 

@@ -16,6 +16,10 @@ class RenderService {
     public function renderMarkdown($markdownText, $isEditMode) {
         require_once __DIR__ . '/../lib/parsedown/Parsedown.php';
         $html = Parsedown::instance()->text($markdownText);
+
+        // Support `FIXME`
+        $html = preg_replace('/(^|\\W)FIXME(\\W|$)/', '$1<span class="fixme">FIXME</span>$2', $html);
+
         if ($isEditMode) {
             // Append `?edit` to local links (in order to stay in edit mode)
             $html = preg_replace_callback('|(<a href="([^"]+))"|',
