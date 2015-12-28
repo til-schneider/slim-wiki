@@ -172,7 +172,9 @@ class Main {
     }
 
     private function createBreadcrumbs($requestPathArray) {
-        $wikiName = $this->context->getConfig()['wikiName'];
+        $config = $this->context->getConfig();
+        $wikiName = $config['wikiName'];
+        $showCompleteBreadcrumbs = $config['showCompleteBreadcrumbs'];
         $pathCount = count($requestPathArray);
         $breadcrumbArray = array(array('name' => $wikiName, 'path' => '', 'active' => ($pathCount == 0)));
 
@@ -183,11 +185,12 @@ class Main {
             $currentPath .= ($i == 0 ? '' : '/') . $pathPart;
             $isLast = ($i == $pathCount - 1);
 
-            if ($isLast || file_exists($articleBaseDir . $currentPath . '/index.md')) {
+            $hasContent = ($isLast || file_exists($articleBaseDir . $currentPath . '/index.md'));
+            if ($hasContent || $showCompleteBreadcrumbs) {
                 // This is the requested file or an directory having an index -> Add it
                 $breadcrumbArray[] = array(
                     'name' => str_replace('_', ' ', $pathPart),
-                    'path' => urlencode($currentPath),
+                    'path' => $hasContent ? urlencode($currentPath) : null,
                     'active' => $isLast);
             }
         }

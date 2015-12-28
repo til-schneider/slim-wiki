@@ -7,4 +7,7 @@ if (function_exists('date_default_timezone_set')) {
 $config['wikiName'] = 'Slim Wiki';
 $config['lang'] = 'en'; // 'de' or 'en'
 
+// Hide directories having no 'index.md' in breadcrumbs
+//$config['showCompleteBreadcrumbs'] = false;
+
 //$config['footerHtml'] = '&copy; Copyright 2000-'.date('Y').' My name';

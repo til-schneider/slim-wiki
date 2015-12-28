@@ -110,7 +110,7 @@ if ($mode == 'edit') {
         if (! $isFirst) {
           echo ' / ';
         }
-        if ($item['active']) {
+        if ($item['active'] || is_null($item['path'])) {
           echo $item['name'];
         } else {
           ?><a href="<?php echo $data['basePath'] . $item['path'] . (($mode == 'edit') ? '?edit' : ''); ?>"><?php echo $item['name']; ?></a><?php

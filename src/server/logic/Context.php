@@ -28,7 +28,8 @@ class Context {
         $config = array(
             'wikiName' => 'Slim Wiki',
             'timezone' => 'Europe/Berlin',
-            'lang'     => 'en'
+            'lang'     => 'en',
+            'showCompleteBreadcrumbs' => true
         );
 
         if (file_exists(__DIR__ . '/../../config.php')) {
