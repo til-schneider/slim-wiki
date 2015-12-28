@@ -34,6 +34,7 @@ module.exports = function (grunt) {
           { expand: true, src: '*.php', dest: dist + '/' },
           { expand: true, src: 'articles/**', dest: dist + '/' },
           { expand: true, src: 'client/img/**', dest: dist + '/' },
+          { expand: true, src: 'client/libs/prism/components/*.min.js', dest: dist + '/' },
           { expand: true, src: 'server/**', dest: dist + '/' }
         ]
       }

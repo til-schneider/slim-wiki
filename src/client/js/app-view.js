@@ -1,4 +1,4 @@
-(function(document, slimwiki, hljs) {
+(function(document, slimwiki, Prism) {
 
   slimwiki.View = {
     updateSyntaxHighlighting: updateSyntaxHighlighting
@@ -12,6 +12,8 @@
   function init() {
     var mode = slimwiki.settings.mode;
 
+    Prism.plugins.autoloader.languages_path = 'client/libs/prism/components/';
+
     if (mode == 'view' || mode == 'edit') {
       updateSyntaxHighlighting();
     }
@@ -23,7 +25,9 @@
     }
 
     var blocks = parentElem.querySelectorAll('pre code');
-    Array.prototype.forEach.call(blocks, hljs.highlightBlock);
+    Array.prototype.forEach.call(blocks, function (blockElem) {
+      Prism.highlightElement(blockElem, false, function() {});
+    });
   }
 
-})(document, slimwiki, hljs);
+})(document, slimwiki, Prism);

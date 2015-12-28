@@ -43,7 +43,7 @@ Used libraries
 
 - [Bootstrap](http://getbootstrap.com/) - Basic CSS styling
 - [Parsedown](https://github.com/erusev/parsedown/) - PHP markdown parser
-- [highlight.js](https://highlightjs.org/) - JavaScript syntax highlighter
+- [prism](http://prismjs.com/) - JavaScript syntax highlighter
 - [CodeMirror](https://codemirror.net/) - JavaScript in-browser code editor
 
 Slim wiki is inspired by [Wikitten](https://github.com/victorstanciu/Wikitten).
