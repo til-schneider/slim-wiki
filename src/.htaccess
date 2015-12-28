@@ -1,6 +1,6 @@
 RewriteEngine On
 
-RewriteCond %{THE_REQUEST} !^GET\ /.*?client/(css|js|img)
+RewriteCond %{THE_REQUEST} !^GET\ .*?/client/([a-z]\.(js|css)|img/|libs/)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [L,QSA]
