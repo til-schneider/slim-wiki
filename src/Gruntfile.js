@@ -33,6 +33,7 @@ module.exports = function (grunt) {
           { src: '.htaccess', dest: dist + '/' },
           { expand: true, src: '*.php', dest: dist + '/' },
           { expand: true, src: 'articles/**', dest: dist + '/' },
+          { src: 'data/dummy.txt', dest: dist + '/' },
           { expand: true, src: 'client/img/**', dest: dist + '/' },
           { expand: true, src: 'client/libs/prism/components/*.min.js', dest: dist + '/' },
           { expand: true, src: 'server/**', dest: dist + '/' }
