@@ -161,12 +161,11 @@ if ($mode == 'edit') {
       </div>
     </form><?php
   } // if ($mode == 'createUser')
+  ?>
 
-  if (isset($data['footerHtml'])) {
-    ?><footer><div class="main-column"><?php echo $data['footerHtml']; ?></div></footer><?php
-  }
+  <footer><div class="main-column"><?php echo $data['footerHtml']; ?><div class="pull-right">powered by <a href="https://github.com/til132/slim-wiki" target="blank">slim-wiki</a></div></div></footer>
 
-?></div><?php // id="main-wrapper" ?>
+</div><?php // id="main-wrapper" ?>
 
 <?php if ($mode == 'edit' || $mode == 'createArticle' || $mode == 'createUser') { ?>
 <!-- build:js client/edit.js -->
