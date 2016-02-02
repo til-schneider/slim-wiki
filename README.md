@@ -29,6 +29,9 @@ Want to develop slim wiki?
         cd src
         npm install
 
+**Note:** node.js is only used by grunt for the build. Slim wiki uses PHP to run on server-side.
+
+
 
 ### Build instructions
 
