@@ -29,6 +29,7 @@ class Context {
             'wikiName' => 'Slim Wiki',
             'timezone' => 'Europe/Berlin',
             'lang'     => 'en',
+            'demoMode' => false,
             'showCompleteBreadcrumbs' => true
         );
 

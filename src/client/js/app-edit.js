@@ -4,6 +4,7 @@
       updatePreviewDelay = 1000,
       updatePreviewTimeout = null,
       updatePreviewRunning = false,
+      demoAlertState = null,
       previewIsDirty = false;
 
   if (slimwiki.supportedBrowser) {
@@ -76,16 +77,30 @@
   }
 
   function onEditorChange() {
+    var isDemoMode = slimwiki.settings.demoMode;
+
+    if (isDemoMode && ! demoAlertState) {
+      var demoAlertElem = document.getElementById('demo-alert');
+      demoAlertElem.style.display = 'block';
+      demoAlertState = 'showing';
+
+      document.getElementById('demoAlertOkBtn').addEventListener('click', function() {
+        demoAlertElem.style.display = 'none';
+        demoAlertState = 'dismissed';
+      });
+    }
+
     previewIsDirty = true;
     if (! updatePreviewRunning) {
       window.clearTimeout(updatePreviewTimeout);
       updatePreviewTimeout = window.setTimeout(function() {
         previewIsDirty = false;
-
         updatePreviewRunning = true;
         var start = new Date().getTime(),
-            articleFilename = slimwiki.settings.articleFilename;
-        callRpc('editor', 'saveArticle', [ articleFilename, editor.getValue() ], function(result, error) {
+            articleFilename = slimwiki.settings.articleFilename,
+            methodName = isDemoMode ? 'previewArticle' : 'saveArticle';
+
+        callRpc('editor', methodName, [ articleFilename, editor.getValue() ], function(result, error) {
           updatePreviewRunning = false;
 
           if (error) {

@@ -10,7 +10,8 @@ class EditorService {
     }
 
     public function isRpcMethod($methodName) {
-        return ($methodName == 'createArticle' || $methodName == 'saveArticle' || $methodName == 'createUserConfig');
+        return ($methodName == 'createArticle' || $methodName == 'previewArticle' || $methodName == 'saveArticle'
+            || $methodName == 'createUserConfig');
     }
 
     // Returns one of: 'logged-in', 'no-credentials', 'wrong-credentials'
@@ -71,6 +72,11 @@ class EditorService {
             . $this->context->getI18n()['createArticle.content'];
 
         return $this->saveArticle($articleFilename, $markdownText);
+    }
+
+    // Used in demo-mode instead of `saveArticle`
+    public function previewArticle($articleFilename, $markdownText) {
+        return $this->context->getRenderService()->renderMarkdown($markdownText, true);
     }
 
     public function saveArticle($articleFilename, $markdownText) {

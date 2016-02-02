@@ -43,6 +43,7 @@ $mode = $data['mode'];
           "mode" => $mode
         );
         if ($mode == 'edit' || $mode == 'createArticle') {
+          $settings['demoMode'] = $data['demoMode'];
           $settings['pageTitle'] = end($data['breadcrumbs'])['name'];
           $settings['requestPath'] = $data['requestPath'];
           $settings['articleFilename'] = $data['articleFilename'];
@@ -125,6 +126,13 @@ if ($mode == 'edit') {
         $isFirst = false;
       }
     ?></div></nav><?php
+  }
+
+  if ($mode == 'edit' && $data['demoMode']) {
+      ?><div id="demo-alert"><div class="alert alert-info clearfix">
+        <div><strong><?php echo $i18n['demoAlert.title']; ?></strong> <?php echo $i18n['demoAlert.message']; ?></div>
+        <button id="demoAlertOkBtn" class="btn btn-default pull-right"><?php echo $i18n['button.ok']; ?></button>
+      </div></div><?php
   }
 
   if ($mode == 'view' || $mode == 'edit') {

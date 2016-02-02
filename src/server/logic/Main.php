@@ -64,6 +64,8 @@ class Main {
     }
 
     private function handleGet($baseUrl, $basePath, $requestPathArray, $requestQuery) {
+        $config = $this->context->getConfig();
+
         $showCreateUserButton = false;
         if ($requestQuery == 'edit' || $requestQuery == 'createUser') {
             $mode = $requestQuery;
@@ -73,7 +75,7 @@ class Main {
             $showCreateUserButton = ! $this->isUserDefined();
         }
 
-        if ($mode == 'edit') {
+        if ($mode == 'edit' && ! $config['demoMode']) {
             $loginState = $this->context->getEditorService()->getLoginState();
             if ($loginState != 'logged-in') {
                 $wikiName = $this->context->getConfig()['wikiName'];
@@ -91,8 +93,6 @@ class Main {
             header('Content-Type:text/html; charset=utf-8');
             echo '<h1>Forbidden</h1>';
         } else {
-            $config = $this->context->getConfig();
-
             $renderService = $this->context->getRenderService();
 
             $fatalErrorMessage = null;
@@ -118,7 +118,7 @@ class Main {
             $data['mode'] = $mode;
             $data['fatalErrorMessage'] = $fatalErrorMessage;
 
-            foreach (array('wikiName', 'footerHtml') as $key) {
+            foreach (array('wikiName', 'demoMode', 'footerHtml') as $key) {
                 if (isset($config[$key])) {
                     $data[$key] = $config[$key];
                 }
