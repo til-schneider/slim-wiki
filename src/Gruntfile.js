@@ -3,7 +3,8 @@ module.exports = function (grunt) {
 
   require('load-grunt-tasks')(grunt);
 
-  var dist = __dirname + '/../dist';
+  var projectDir = __dirname + '/..';
+  var dist = projectDir + '/dist';
 
   grunt.registerTask('build', [
     'copy',
@@ -18,6 +19,12 @@ module.exports = function (grunt) {
   grunt.registerTask('default', [
     'clean',
     'build'
+  ]);
+
+  grunt.registerTask('release', [
+    'clean',
+    'build',
+    'compress:releaseZip'
   ]);
 
   grunt.initConfig({
@@ -62,6 +69,28 @@ module.exports = function (grunt) {
 
     usemin: {
       html: dist + '/server/layout/page.php'
+    },
+
+    compress: {
+      releaseZip: {
+        options: {
+          archive: dist + '/slim-wiki.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: projectDir,
+            src: [ 'LICENSE', 'README.md' ],
+            dest: 'slim-wiki/'
+          },
+          {
+            expand: true,
+            cwd: dist,
+            src: [ '.htaccess', 'config-example.php', 'index.php', 'articles/**', 'client/**', 'data/dummy.txt', 'server/**' ],
+            dest: 'slim-wiki/'
+          }
+        ]
+      }
     },
 
     watch: {

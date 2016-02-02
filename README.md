@@ -16,27 +16,47 @@ Check out the **[demo website](http://slim-wiki.murfman.de/)** for more details 
 Want to develop slim wiki?
 --------------------------
 
+### Set up build environment
+
+1. Install [node.js](https://nodejs.org/en/) (this includes `npm`)
+
+2. Install grunt globally:
+
+        sudo npm install -g grunt-cli
+
+3. Install grunt dependencies in project:
+
+        cd src
+        npm install
+
 
 ### Build instructions
-
-Install grunt globally:
-
-    sudo npm install -g grunt-cli
-
-Install grunt dependencies in project:
-
-    cd src
-    npm install
 
 Build client:
 
     cd src
     grunt
 
+Now link the project directory to a locally installed Apache Webserver with PHP and `mod_rewrite` enabled.
+
+Go to the browser and open one of:
+
+- `http:localhost/path/to/src/` - for the development version using the source JavaScript files.
+- `http:localhost/path/to/dist/` - for the production version using compressed CSS and JavaScript.
+
+
+
+### Other build options
+
 Build automatically on source changes (watch mode):
 
     cd src
     grunt watch
+
+Build a release zip:
+
+    cd src
+    grunt release
 
 
 
