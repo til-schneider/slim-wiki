@@ -124,9 +124,14 @@
     // Synchronize scroll position of preview when editor is scrolled
     var scrollInfo = editor.getScrollInfo(),
         scrollFactor = scrollInfo.top / (scrollInfo.height - scrollInfo.clientHeight),
-        bodyElem = document.body;
+        docElem = document.documentElement,
+        bodyElem = document.body,
+        scrollHeight;
 
-    window.scrollTo(0, scrollFactor * (bodyElem.scrollHeight - bodyElem.clientHeight));
+    // Workaround: In Chrome the body has the real scrollHeight, in Firefox the documentElement has it
+    scrollHeight = Math.max(docElem.scrollHeight, bodyElem.scrollHeight);
+
+    window.scrollTo(0, scrollFactor * (scrollHeight - bodyElem.clientHeight));
   }
 
   function callRpc(objectName, methodName, paramArray, done) {
