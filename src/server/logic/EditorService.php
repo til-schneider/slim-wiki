@@ -68,10 +68,19 @@ class EditorService {
             $articleFilename .= '.md';
         }
 
-        $markdownText = $pageTitle . "\n" . str_repeat('=', strlen($pageTitle)) . "\n\n"
-            . $this->context->getI18n()['createArticle.content'];
+        $markdownText = $this->getNewArticleMarkdown($pageTitle);
 
-        return $this->saveArticle($articleFilename, $markdownText);
+        $config = $this->context->getConfig();
+        if ($config['demoMode']) {
+            return $this->previewArticle($articleFilename, $markdownText);
+        } else {
+            return $this->saveArticle($articleFilename, $markdownText);
+        }
+    }
+
+    public function getNewArticleMarkdown($pageTitle) {
+        return $pageTitle . "\n" . str_repeat('=', strlen($pageTitle)) . "\n\n"
+            . $this->context->getI18n()['createArticle.content'];
     }
 
     // Used in demo-mode instead of `saveArticle`

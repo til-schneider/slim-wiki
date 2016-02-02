@@ -106,7 +106,7 @@ class Main {
                 if ($fatalErrorMessage != null) {
                     $fatalErrorMessage = $this->context->getI18n()['error.editingArticleFailed'] . '<br/>' . $fatalErrorMessage;
                     $mode = 'error';
-                } else if (! $renderService->articleExists($articleFilename)) {
+                } else if (! $renderService->articleExists($articleFilename) && ! $config['demoMode']) {
                     $mode = 'createArticle';
                     $showCreateUserButton = false;
                 }
@@ -131,7 +131,17 @@ class Main {
             $data['articleFilename'] = $articleFilename;
 
             if ($mode == 'view' || $mode == 'edit') {
-                $articleMarkdown = file_get_contents($this->context->getArticleBaseDir() . $articleFilename);
+                if ($renderService->articleExists($articleFilename)) {
+                    $articleMarkdown = file_get_contents($this->context->getArticleBaseDir() . $articleFilename);
+                } else if ($config['demoMode']) {
+                    // Open a fake "new article" for demo mode
+
+                    // We have no real page title here -> Create one from the file name
+                    $pageTitle = str_replace('_', ' ', end($requestPathArray));
+
+                    $editorService = $this->context->getEditorService();
+                    $articleMarkdown = $editorService->getNewArticleMarkdown($pageTitle);
+                }
                 $data['articleMarkdown'] = $articleMarkdown;
                 $data['articleHtml'] = $renderService->renderMarkdown($articleMarkdown, $mode == 'edit');
             }
