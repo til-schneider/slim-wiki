@@ -119,7 +119,9 @@ class Main {
             $data['fatalErrorMessage'] = $fatalErrorMessage;
 
             foreach (array('wikiName', 'footerHtml') as $key) {
-                $data[$key] = $config[$key];
+                if (isset($config[$key])) {
+                    $data[$key] = $config[$key];
+                }
             }
 
             $data['breadcrumbs'] = $this->createBreadcrumbs($requestPathArray);
