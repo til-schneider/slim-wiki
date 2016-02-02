@@ -159,7 +159,7 @@ if ($mode == 'edit') {
   } // if ($mode == 'createUser')
   ?>
 
-  <footer><div class="main-column"><?php echo $data['footerHtml']; ?><div class="pull-right">powered by <a href="https://github.com/til132/slim-wiki" target="blank">slim-wiki</a></div></div></footer>
+  <footer><div class="main-column"><?php echo $data['footerHtml']; ?><div class="pull-right">powered by <a href="https://github.com/til-schneider/slim-wiki" target="blank">slim-wiki</a></div></div></footer>
 
 </div><?php // id="main-wrapper" ?>
 
