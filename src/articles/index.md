@@ -15,12 +15,12 @@ Slim wiki is a fast and slim wiki based on PHP and Markdown.
 Installation
 ------------
 
-**Requirements:**
+Requirements:
 
 - PHP 5.3+
 - Apache Webserver with `mod_rewrite` enabled.
 
-**Installation:**
+Installation:
 
 1. [Download](http://slim-wiki.murfman.de/slim-wiki.zip) the latest version.
 2. Extract the archive and put the contents on your webspace.
@@ -37,12 +37,12 @@ How to use the wiki
 - Your changes are automatically saved as soon as you stop writing for a second. If you see your changes on the right side of the edit view, they will be already saved (with a daily backup) and public. There is no save button you have to press.
 - You can add new pages by adding a link to [a non-existing page](this_is_a_new_page). Then click the link and slim wiki will allow you to add the new page.
 
-**Tipps:**
+Tipps:
 
 - Use the main page as overview and add links to subpages.
 - You can add a [link to a directory](cheat_sheets) having a `index.md`.
 
-**Notes:**
+Notes:
 
 - The extension `.md` is optional.
 - Underscores in directory or file names are shown as spaces in the breadcrumbs. So if you name your file `My_new_page.md`, it will be shown as `My new page`.
