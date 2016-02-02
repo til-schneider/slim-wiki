@@ -17,8 +17,8 @@ class RenderService {
         require_once __DIR__ . '/../lib/parsedown/Parsedown.php';
         $html = Parsedown::instance()->text($markdownText);
 
-        // Support `FIXME`
-        $html = preg_replace('/(^|\\W)FIXME(\\W|$)/', '$1<span class="fixme">FIXME</span>$2', $html);
+        // Support `TODO` and `FIXME`
+        $html = preg_replace('/(^|\\W)(TODO|FIXME):?(\\W|$)/', '$1<span class="todo">$2</span>$3', $html);
 
         if ($isEditMode) {
             // Append `?edit` to local links (in order to stay in edit mode)
