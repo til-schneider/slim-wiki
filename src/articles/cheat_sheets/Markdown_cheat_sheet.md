@@ -44,7 +44,7 @@ Inline markup like _italics_,  **bold**, ~~strike through~~ and `code()`:
 _italics_,  **bold**, ~~strike through~~ and `code()`
 ~~~
 
-Want to mark something in your article to fix later? Add a yellow TODO or FIXME marker:
+Want to mark something in your page to fix later? Add a yellow TODO or FIXME marker:
 
 ~~~markdown
 Simply write TODO or FIXME.
