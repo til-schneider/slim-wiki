@@ -49,6 +49,9 @@ class Main {
                     try {
                         $responseData['result'] = call_user_func_array(array($object, $methodName), $requestData['params']);
                     } catch (Exception $exc) {
+                        if ($exc->getMessage() == 'Not logged in') {
+                            $this->setUnauthorizedHeaders();
+                        }
                         $msg = "Calling RPC $objectName.$methodName failed: " . $exc->getMessage();
                         error_log($msg);
                         $responseData['error'] = array( 'code' => -32000, 'message' => $msg );
@@ -78,9 +81,7 @@ class Main {
         if ($mode == 'edit' && ! $config['demoMode']) {
             $loginState = $this->context->getEditorService()->getLoginState();
             if ($loginState != 'logged-in') {
-                $wikiName = $this->context->getConfig()['wikiName'];
-                header('WWW-Authenticate: Basic realm="'.$wikiName.'"');
-                header('HTTP/1.0 401 Unauthorized');
+                $this->setUnauthorizedHeaders();
 
                 $mode = 'view';
                 $showCreateUserButton = true;
@@ -148,6 +149,12 @@ class Main {
 
             $this->renderPage($data);
         }
+    }
+
+    private function setUnauthorizedHeaders() {
+        $wikiName = $this->context->getConfig()['wikiName'];
+        header('WWW-Authenticate: Basic realm="'.$wikiName.'"');
+        header('HTTP/1.0 401 Unauthorized');
     }
 
     private function isUserDefined() {
