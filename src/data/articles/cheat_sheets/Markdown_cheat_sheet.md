@@ -1,6 +1,14 @@
 Markdown cheat sheet
 ====================
 
+This page shows the most important parts of the Markdown syntax.
+
+For more details see:
+
+- The [Markdown syntax spec](https://daringfireball.net/projects/markdown/syntax) of Daring Fireball.
+- [GitHub-flavored Markdown](https://help.github.com/articles/github-flavored-markdown) - GitHub's enhancements to Markdown.
+
+
 Headlines
 ---------
 
