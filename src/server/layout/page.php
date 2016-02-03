@@ -82,7 +82,7 @@ if ($mode != 'view') {
 
 if ($mode == 'edit') {
   ?><div id="editor-wrapper">
-    <textarea id="editor"><?php echo str_replace('<', '&lt;', $data['articleMarkdown']); ?></textarea>
+    <textarea id="editor"><?php echo str_replace('<', '&lt;', str_replace('&', '&amp;', $data['articleMarkdown'])); ?></textarea>
   </div>
   <script type="text/javascript">
     if (slimwiki.supportedBrowser) {
