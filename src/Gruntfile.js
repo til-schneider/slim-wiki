@@ -79,8 +79,11 @@ module.exports = function (grunt) {
           {
             expand: true,
             cwd: projectDir,
-            src: [ 'LICENSE', 'README.md' ],
-            dest: 'slim-wiki/'
+            src: [ 'LICENSE', 'README-for-release-zip.md' ],
+            dest: 'slim-wiki/',
+            rename: function(dest, path, rule) {
+              return dest + path.replace('-for-release-zip', '');
+            }
           },
           {
             expand: true,
