@@ -23,7 +23,7 @@ Requirements:
 
 Installation:
 
-1. [Download](http://slim-wiki.murfman.de/slim-wiki.zip) the latest version.
+1. [Download](https://github.com/til-schneider/slim-wiki/releases/latest) the latest version.
 2. Extract the archive and put the contents on your webspace.
 3. Create a `config.xml` (copy and adjust the example).
 4. Give write permissions to the server for directories `articles` and `data`.
