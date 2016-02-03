@@ -127,7 +127,7 @@ Create a simple code block by intending the text using 4 or more spaces:
     which(isEasy) toRemember();
 ~~~
 
-You can also create a code block using `~~~` or <code>```</code>. If you set a language (e.g. `~~~ xml`), your code will be shown using syntax highlighting:
+You can also create a code block using `~~~` or <code>&#96;&#96;&#96;</code>. If you set a language (e.g. `~~~ xml`), your code will be shown using syntax highlighting:
 
 ~~~ xml
 <?xml version="1.0" encoding="UTF-8"?>

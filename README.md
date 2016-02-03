@@ -44,8 +44,8 @@ Now link the project directory to a locally installed Apache Webserver with PHP 
 
 Go to the browser and open one of:
 
-- `http:localhost/path/to/src/` - for the development version using the source JavaScript files.
-- `http:localhost/path/to/dist/` - for the production version using compressed CSS and JavaScript.
+- `http://localhost/path/to/src/` - for the development version using the source JavaScript files.
+- `http://localhost/path/to/dist/` - for the production version using compressed CSS and JavaScript.
 
 
 
