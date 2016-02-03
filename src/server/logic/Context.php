@@ -15,8 +15,8 @@ class Context {
     public function __construct() {
         $appBaseDir = realpath(__DIR__ . '/../../');
 
-        $this->articleBaseDir = $appBaseDir . '/articles/';
         $this->dataBaseDir = $appBaseDir . '/data/';
+        $this->articleBaseDir = $this->dataBaseDir . 'articles/';
     }
 
     public function getConfig() {

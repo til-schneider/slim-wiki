@@ -39,10 +39,9 @@ module.exports = function (grunt) {
         files: [
           { src: '.htaccess', dest: dist + '/' },
           { expand: true, src: '*.php', dest: dist + '/' },
-          { expand: true, src: 'articles/**', dest: dist + '/' },
-          { src: 'data/dummy.txt', dest: dist + '/' },
           { expand: true, src: 'client/img/**', dest: dist + '/' },
           { expand: true, src: 'client/libs/prism/components/*.min.js', dest: dist + '/' },
+          { expand: true, src: 'data/articles/**', dest: dist + '/' },
           { expand: true, src: 'server/**', dest: dist + '/' }
         ]
       }
@@ -86,7 +85,7 @@ module.exports = function (grunt) {
           {
             expand: true,
             cwd: dist,
-            src: [ '.htaccess', 'config-example.php', 'index.php', 'articles/**', 'client/**', 'data/dummy.txt', 'server/**' ],
+            src: [ '.htaccess', 'config-example.php', 'index.php', 'client/**', 'data/articles/**', 'server/**' ],
             dest: 'slim-wiki/'
           }
         ]

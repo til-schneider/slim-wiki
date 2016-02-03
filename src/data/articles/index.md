@@ -23,10 +23,10 @@ Requirements:
 
 Installation:
 
-1. [Download](https://github.com/til-schneider/slim-wiki/releases/latest) the latest version.
-2. Extract the archive and put the contents on your webspace.
+1. [Download](https://github.com/til-schneider/slim-wiki/releases/latest) the latest `slim-wiki.zip`.
+2. Extract the zip and put the contents on your webspace.
 3. Create a `config.xml` (copy and adjust the example).
-4. Give write permissions to the server for directories `articles` and `data`.
+4. Give write permissions to the server for the directory `data` (including subdirectories and files).
 
 
 
