@@ -209,7 +209,7 @@ class Main {
                 // This is the requested file or an directory having an index -> Add it
                 $breadcrumbArray[] = array(
                     'name' => str_replace('_', ' ', $pathPart),
-                    'path' => $hasContent ? urlencode($currentPath) : null,
+                    'path' => $hasContent ? urldecode($currentPath) : null,
                     'active' => $isLast);
             }
         }
