@@ -177,8 +177,8 @@ class Main {
         $articleFilename = implode('/', $requestPathArray);
 
         // Support `index.md` for directories
-        if ($articleFilename == '' || substr($articleFilename, -1) == '/') {
-            $articleFilename = $articleFilename . 'index.md';
+        if (is_dir($articleBaseDir . $articleFilename) || substr($articleFilename, -1) == '/') {
+            $articleFilename = rtrim($articleFilename, '/') . '/index.md';
         }
 
         // Make the extension `.md` optional
