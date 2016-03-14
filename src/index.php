@@ -15,6 +15,8 @@ function init() {
     $requestPathArray = array();
     $isBasePath = true;
     foreach ($uriPathArray as $level => $uriDir) {
+        $uriDir = urldecode($uriDir);
+
         $scriptDir = isset($scriptPathArray[$level]) ? $scriptPathArray[$level] : null;
         if ($isBasePath && $scriptDir != $uriDir) {
             // The URI path differs from the script path here -> We arrived at the level where the app is installed

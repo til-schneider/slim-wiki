@@ -138,7 +138,12 @@ class Main {
                     // Open a fake "new article" for demo mode
 
                     // We have no real page title here -> Create one from the file name
-                    $pageTitle = str_replace('_', ' ', end($requestPathArray));
+                    $lastPathPart = end($requestPathArray);
+                    if ($lastPathPart == '') {
+                        // This is the `index.md` of a directory -> Use the directory name
+                        $lastPathPart = prev($requestPathArray);
+                    }
+                    $pageTitle = str_replace('_', ' ', $lastPathPart);
 
                     $editorService = $this->context->getEditorService();
                     $articleMarkdown = $editorService->getNewArticleMarkdown($pageTitle);
@@ -172,8 +177,8 @@ class Main {
         $articleFilename = implode('/', $requestPathArray);
 
         // Support `index.md` for directories
-        if (is_dir($articleBaseDir . $articleFilename)) {
-            $articleFilename = ltrim($articleFilename . '/index.md', '/');
+        if ($articleFilename == '' || substr($articleFilename, -1) == '/') {
+            $articleFilename = $articleFilename . 'index.md';
         }
 
         // Make the extension `.md` optional
@@ -194,14 +199,22 @@ class Main {
         $config = $this->context->getConfig();
         $wikiName = $config['wikiName'];
         $showCompleteBreadcrumbs = $config['showCompleteBreadcrumbs'];
+
         $pathCount = count($requestPathArray);
+        if ($pathCount > 1 && end($requestPathArray) == '') {
+            // This is the `index.md` of a directory -> Don't include the last part in the breadcrumbs
+            $pathCount--;
+        }
+
         $breadcrumbArray = array(array('name' => $wikiName, 'path' => '', 'active' => ($pathCount == 0)));
 
         $articleBaseDir = $this->context->getArticleBaseDir();
         $currentPath = '';
+        $currentPathUrlEncoded = '';
         for ($i = 0; $i < $pathCount; $i++) {
             $pathPart = $requestPathArray[$i];
             $currentPath .= ($i == 0 ? '' : '/') . $pathPart;
+            $currentPathUrlEncoded .= ($i == 0 ? '' : '/') . urlencode($pathPart);
             $isLast = ($i == $pathCount - 1);
 
             $hasContent = ($isLast || file_exists($articleBaseDir . $currentPath . '/index.md'));
@@ -209,7 +222,7 @@ class Main {
                 // This is the requested file or an directory having an index -> Add it
                 $breadcrumbArray[] = array(
                     'name' => str_replace('_', ' ', $pathPart),
-                    'path' => $hasContent ? urlencode($currentPath) : null,
+                    'path' => $hasContent ? $currentPathUrlEncoded : null,
                     'active' => $isLast);
             }
         }

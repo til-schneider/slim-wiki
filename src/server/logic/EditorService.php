@@ -79,7 +79,7 @@ class EditorService {
     }
 
     public function getNewArticleMarkdown($pageTitle) {
-        return $pageTitle . "\n" . str_repeat('=', strlen($pageTitle)) . "\n\n"
+        return $pageTitle . "\n" . str_repeat('=', mb_strlen($pageTitle, $encoding = 'utf-8')) . "\n\n"
             . $this->context->getI18n()['createArticle.content'];
     }
 
