@@ -119,7 +119,7 @@ class Main {
             $data['mode'] = $mode;
             $data['fatalErrorMessage'] = $fatalErrorMessage;
 
-            foreach (array('wikiName', 'demoMode', 'footerHtml') as $key) {
+            foreach (array('wikiName', 'theme', 'demoMode', 'footerHtml') as $key) {
                 if (isset($config[$key])) {
                     $data[$key] = $config[$key];
                 }

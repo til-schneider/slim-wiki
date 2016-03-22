@@ -42,18 +42,17 @@ module.exports = function (grunt) {
           { expand: true, src: 'client/img/**', dest: dist + '/' },
           { expand: true, src: 'client/libs/prism/components/*.min.js', dest: dist + '/' },
           { expand: true, src: 'data/articles/**', dest: dist + '/' },
-          { expand: true, src: 'server/**', dest: dist + '/' }
+          { expand: true, src: [ 'server/**', '!**/less/**' ], dest: dist + '/' }
         ]
       }
     },
 
     less: {
       dist: {
-        files: (function () {
-          var files = {};
-          files['.tmp/app-view.css'] = 'client/less/app-view.less';
-          return files;
-        })()
+        files: {
+          '.tmp/app-view.css': 'client/less/app-view.less',
+          'server/theme/slim/css/theme.css': 'server/theme/slim/less/theme.less'
+        }
       }
     },
 
@@ -97,7 +96,10 @@ module.exports = function (grunt) {
 
     watch: {
       less: {
-        files: 'client/less/*.less',
+        files: [
+          'client/less/*.less',
+          'server/theme/*/less/*.less'
+        ],
         tasks: 'less'
       },
       copy: {

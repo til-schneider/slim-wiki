@@ -1,0 +1,44 @@
+
+@contentMaxWidth: 800px;
+@contentMinMarginX: 30px;
+
+// We need a variable using brackets here, otherwise less won't calculate the width
+// See: https://github.com/less/less.js/issues/1903
+@small-screen-breakpoint: (@contentMaxWidth + 2 * @contentMinMarginX);
+
+.main-column {
+  width: @contentMaxWidth;
+  margin: 0 auto;
+
+  .mode-edit & {
+    width: auto;
+    margin: 0 @contentMinMarginX;
+  }
+
+  @media (max-width: @small-screen-breakpoint) {
+    width: auto;
+    margin: 0 @contentMinMarginX;
+  }
+}
+
+.breadcrumbs {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+
+  .mode-edit & {
+    width: 50%;
+  }
+}
+
+#content {
+  padding: 30px 0 150px;
+}
+
+footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}

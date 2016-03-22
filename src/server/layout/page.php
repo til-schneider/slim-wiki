@@ -1,6 +1,10 @@
 <?php
 
 $mode = $data['mode'];
+$themeDir = __DIR__ . '/../theme/' . $data['theme'];
+$themePath = 'server/theme/' . $data['theme'];
+
+include($themeDir . '/init-theme.php');
 
 ?><!doctype html>
 <html>
@@ -19,8 +23,6 @@ $mode = $data['mode'];
 
   <base href="<?php echo $data['baseUrl']; ?>">
 
-  <link href="client/img/favicon-32.png" rel="shortcut icon" />
-
   <?php if ($mode == 'edit') { ?>
   <!-- build:css client/edit.css -->
   <link href="client/libs/CodeMirror/lib/codemirror.css" rel="stylesheet">
@@ -33,6 +35,8 @@ $mode = $data['mode'];
 
   <link href=".tmp/app-view.css" rel="stylesheet" />
   <!-- endbuild -->
+
+  <?php include($themeDir . '/head.php'); ?>
 
   <script type="text/javascript">
     window.slimwiki = {
@@ -105,27 +109,7 @@ if ($mode == 'edit') {
   }
 
   if ($mode == 'view' || $mode == 'edit' || $mode == 'noSuchArticle' || $mode == 'createArticle') {
-    ?><nav class="breadcrumbs"><div class="main-column"><?php
-      if ($data['showCreateUserButton']) {
-        ?><a class="btn btn-default btn-xs pull-right" href="<?php echo $data['requestPath']; ?>?createUser"><?php echo $i18n['button.createUser']; ?></a><?php
-      }
-      if ($mode == 'view' || $mode == 'noSuchArticle') {
-        ?><a class="btn btn-default btn-xs pull-right" href="<?php echo $data['requestPath']; ?>?edit"><?php echo $i18n['button.edit']; ?></a><?php
-      }
-
-      $isFirst = true;
-      foreach ($data['breadcrumbs'] as $item) {
-        if (! $isFirst) {
-          echo ' / ';
-        }
-        if ($item['active'] || is_null($item['path'])) {
-          echo '<span>' . $item['name'] . '</span>';
-        } else {
-          ?><a href="<?php echo $data['basePath'] . $item['path'] . (($mode == 'edit') ? '?edit' : ''); ?>"><?php echo $item['name']; ?></a><?php
-        }
-        $isFirst = false;
-      }
-    ?></div></nav><?php
+    include($themeDir . '/page-header.php');
   }
 
   if ($mode == 'edit' && $data['demoMode']) {
@@ -136,7 +120,7 @@ if ($mode == 'edit') {
   }
 
   if ($mode == 'view' || $mode == 'edit') {
-    ?><article id="content" class="markdown main-column"><?php echo $data['articleHtml']; ?></article><?php
+    include($themeDir . '/content.php');
   }
 
   if ($mode == 'noSuchArticle' || $mode == 'createArticle') {
@@ -165,15 +149,9 @@ if ($mode == 'edit') {
       </div>
     </form><?php
   } // if ($mode == 'createUser')
-  ?>
 
-  <footer><div class="main-column">
-    <?php
-      if (isset($data['footerHtml'])) {
-        echo $data['footerHtml'];
-      }
-    ?><div class="pull-right">powered by <a href="https://github.com/til-schneider/slim-wiki" target="blank">slim-wiki</a></div>
-  </div></footer>
+  include($themeDir . '/page-footer.php');
+  ?>
 
 </div><?php // id="main-wrapper" ?>
 
