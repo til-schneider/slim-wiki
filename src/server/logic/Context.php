@@ -31,6 +31,7 @@ class Context {
             'lang'     => 'en',
             'theme'    => 'slim',
             'demoMode' => false,
+            'openExternalLinksInNewTab' => true,
             'showCompleteBreadcrumbs' => true
         );
 
