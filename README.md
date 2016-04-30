@@ -67,7 +67,7 @@ Build a release zip:
 
 1. Build the project (see above).
 2. Copy the contents of the `dist` directory to your webspace.
-3. Create a `config.xml` (copy and adjust the example).
+3. Create a `config.php` (copy and adjust the example).
 4. Give write permissions to the server for the directory `data` (including subdirectories and files).
 
 
