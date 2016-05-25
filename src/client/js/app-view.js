@@ -1,4 +1,4 @@
-(function(document, slimwiki, Prism) {
+(function(document, slimwiki, Prism, tocbot) {
 
   slimwiki.View = {
     updateSyntaxHighlighting: updateSyntaxHighlighting
@@ -15,8 +15,38 @@
     Prism.plugins.autoloader.languages_path = 'client/libs/prism/components/';
 
     if (mode == 'view' || mode == 'edit') {
+      initToc();
       updateSyntaxHighlighting();
     }
+  }
+
+  function initToc() {
+    var headingSelector = 'h1, h2, h3',
+        nextId = 1,
+        headingsOffset = 80,
+        headings;
+
+    // tocbot needs ID attributes at the headings in order to function
+    headings = document.getElementById('content').querySelectorAll(headingSelector);
+    Array.prototype.forEach.call(headings, function (headingElem) {
+      headingElem.id = 'heading-' + (nextId++);
+    });
+
+    tocbot.init({
+      // Where to render the table of contents.
+      tocSelector: '.toc-wrapper',
+      // Where to grab the headings to build the table of contents.
+      contentSelector: '#content',
+      // Which headings to grab inside of the contentSelector element.
+      headingSelector: headingSelector,
+      // Headings offset between the headings and the top of the document.
+      headingsOffset: headingsOffset,
+      // smooth-scroll options object, see docs at:
+      // https://github.com/cferdinandi/smooth-scroll
+      smoothScrollOptions: {
+        offset: headingsOffset
+      }
+    });
   }
 
   function updateSyntaxHighlighting(parentElem) {
@@ -30,4 +60,4 @@
     });
   }
 
-})(document, slimwiki, Prism);
+})(document, slimwiki, Prism, tocbot);

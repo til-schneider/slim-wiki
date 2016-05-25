@@ -26,6 +26,31 @@ body {
   }
 }
 
+.toc-wrapper {
+  ul {
+    list-style: none;
+  }
+  .toc-link {
+    display: block;
+    padding: 5px 0;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+
+    &::before {
+      margin-top: -5px;
+    }
+  }
+  .is-active-link {
+    font-weight: normal;
+    color: @brand-primary;
+
+    &::before {
+      background-color: @brand-primary;
+    }
+  }
+}
+
 footer {
   height: 80px;
   padding-top: 30px;

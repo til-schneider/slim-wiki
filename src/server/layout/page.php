@@ -32,6 +32,7 @@ include($themeDir . '/init-theme.php');
 
   <!-- build:css client/view.css -->
   <link href="client/libs/prism/themes/prism-default-patched.css" rel="stylesheet" />
+  <link href="client/libs/tocbot/tocbot.css" rel="stylesheet" />
 
   <link href=".tmp/app-view.css" rel="stylesheet" />
   <!-- endbuild -->
@@ -179,6 +180,7 @@ if ($mode == 'edit') {
 <!-- build:js client/view.js -->
   <script src="client/libs/prism/prism-patched.js"></script>
   <script src="client/libs/prism/plugins/autoloader/prism-autoloader.js"></script>
+  <script src="client/libs/tocbot/tocbot.js"></script>
 
   <script src="client/js/app-view.js"></script>
 <!-- endbuild -->

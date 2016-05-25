@@ -78,6 +78,7 @@ Build a release zip:
 - [Parsedown](https://github.com/erusev/parsedown/) - PHP markdown parser.
 - [prism](http://prismjs.com/) - JavaScript syntax highlighter.
 - [CodeMirror](https://codemirror.net/) - JavaScript in-browser code editor.
+- [Tocbot](http://tscanlin.github.io/tocbot/) - JavaScript table of contents generator.
 - [Vanilla JS](http://vanilla-js.com/) - No jQuery. Instead standard DOM API in order to make things fast and slim.
 
 

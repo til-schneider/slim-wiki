@@ -1,10 +1,20 @@
 
 @contentMaxWidth: 800px;
 @contentMinMarginX: 30px;
+@tocMinWidth: 200px;
+@tocMarginLeft: @contentMinMarginX;
 
-// We need a variable using brackets here, otherwise less won't calculate the width
-// See: https://github.com/less/less.js/issues/1903
-@small-screen-breakpoint: (@contentMaxWidth + 2 * @contentMinMarginX);
+// Screen sizes:
+// - small:  Content takes full width, TOC is hidden
+// - medium: Content is left, TOC is right or hidden (if width < @screen-size-toc-hidden-max)
+// - large:  Content is centered, TOC is right
+//
+// NOTE: We need a variable using brackets here, otherwise less won't calculate the width
+//       See: https://github.com/less/less.js/issues/1903
+@screen-size-small-max:  (@contentMaxWidth + 2 * @contentMinMarginX);
+@screen-size-toc-hidden-max: (@screen-size-small-max + @tocMinWidth);
+@screen-size-medium-min: (@screen-size-small-max + 1px);
+@screen-size-medium-max: (@contentMaxWidth + 2 * @tocMinWidth);
 
 .main-column {
   width: @contentMaxWidth;
@@ -15,7 +25,11 @@
     margin: 0 @contentMinMarginX;
   }
 
-  @media (max-width: @small-screen-breakpoint) {
+  @media (min-width: @screen-size-medium-min) and (max-width: @screen-size-medium-max) {
+    width: @contentMaxWidth;
+    margin: 0 @contentMinMarginX;
+  }
+  @media (max-width: @screen-size-small-max) {
     width: auto;
     margin: 0 @contentMinMarginX;
   }
@@ -29,6 +43,26 @@
 
   .mode-edit & {
     width: 50%;
+  }
+}
+
+.toc-wrapper {
+  position: fixed;
+  left: 50%;
+  right: 10px;
+  top: 70px;
+  margin-left: @contentMaxWidth / 2 + @tocMarginLeft;
+
+  .mode-edit & {
+    display: none;
+  }
+
+  @media (min-width: @screen-size-medium-min) and (max-width: @screen-size-medium-max) {
+    left: @contentMinMarginX + @contentMaxWidth + @tocMarginLeft;
+    margin-left: 0;
+  }
+  @media (max-width: @screen-size-toc-hidden-max) {
+    display: none;
   }
 }
 
