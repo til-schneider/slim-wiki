@@ -131,7 +131,7 @@ class EditorService {
 
     public function createUserConfig($user, $pass) {
         $type = 'sha256';
-        $salt = uniqid(mt_rand(), true);
+        $salt = uniqid(mt_rand());
         $hash = hash($type, $pass . $salt);
 
         return "\$config['user.".strtolower($user)."'] = array('type' => '$type', 'salt' => '$salt', 'hash' => '$hash');";
