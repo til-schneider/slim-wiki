@@ -15,4 +15,7 @@ $config['lang'] = 'en'; // 'de' or 'en'
 // Hide directories having no 'index.md' in breadcrumbs
 //$config['showCompleteBreadcrumbs'] = false;
 
+// Hide table of contents
+//$config['showToc'] = false;
+
 //$config['footerHtml'] = '&copy; Copyright 2000-'.date('Y').' My name';

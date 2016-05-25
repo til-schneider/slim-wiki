@@ -21,6 +21,10 @@
   }
 
   function initToc() {
+    if (! slimwiki.settings.showToc) {
+      return; // Nothing to do
+    }
+
     var headingSelector = 'h1, h2, h3',
         nextId = 1,
         headingsOffset = 80,

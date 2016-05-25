@@ -6,13 +6,15 @@
 
 // Screen sizes:
 // - small:  Content takes full width, TOC is hidden
-// - medium: Content is left, TOC is right or hidden (if width < @screen-size-toc-hidden-max)
+// - medium: If TOC is enabled: Content is left, TOC is right
+//           If TOC is disabled: Same as large
 // - large:  Content is centered, TOC is right
 //
 // NOTE: We need a variable using brackets here, otherwise less won't calculate the width
 //       See: https://github.com/less/less.js/issues/1903
 @screen-size-small-max:  (@contentMaxWidth + 2 * @contentMinMarginX);
-@screen-size-toc-hidden-max: (@screen-size-small-max + @tocMinWidth);
+@screen-size-medium-content-shrinks-max: (@screen-size-small-max + @tocMinWidth);       // content is dynamic, TOC has fixed width
+@screen-size-medium-content-full-min: (@screen-size-medium-content-shrinks-max + 1px);  // content has fixed width, TOC is dynamic
 @screen-size-medium-min: (@screen-size-small-max + 1px);
 @screen-size-medium-max: (@contentMaxWidth + 2 * @tocMinWidth);
 
@@ -25,9 +27,16 @@
     margin: 0 @contentMinMarginX;
   }
 
-  @media (min-width: @screen-size-medium-min) and (max-width: @screen-size-medium-max) {
-    width: @contentMaxWidth;
-    margin: 0 @contentMinMarginX;
+  .is-toc-enabled & {
+    @media (min-width: @screen-size-medium-min) and (max-width: @screen-size-medium-content-shrinks-max) {
+      width: auto;
+      margin-left: @contentMinMarginX;
+      margin-right: @contentMinMarginX + @tocMinWidth;
+    }
+    @media (min-width: @screen-size-medium-content-full-min) and (max-width: @screen-size-medium-max) {
+      width: @contentMaxWidth;
+      margin: 0 @contentMinMarginX;
+    }
   }
   @media (max-width: @screen-size-small-max) {
     width: auto;
@@ -57,11 +66,15 @@
     display: none;
   }
 
-  @media (min-width: @screen-size-medium-min) and (max-width: @screen-size-medium-max) {
+  @media (min-width: @screen-size-medium-min) and (max-width: @screen-size-medium-content-shrinks-max) {
+    width: @tocMinWidth;
+    left: auto;
+  }
+  @media (min-width: @screen-size-medium-content-full-min) and (max-width: @screen-size-medium-max) {
     left: @contentMinMarginX + @contentMaxWidth + @tocMarginLeft;
     margin-left: 0;
   }
-  @media (max-width: @screen-size-toc-hidden-max) {
+  @media (max-width: @screen-size-small-max) {
     display: none;
   }
 }

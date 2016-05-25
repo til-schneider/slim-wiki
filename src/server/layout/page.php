@@ -45,7 +45,8 @@ include($themeDir . '/init-theme.php');
       supportedBrowser: !! document.addEventListener,
       settings: <?php
         $settings = array(
-          "mode" => $mode
+          'mode' => $mode,
+          'showToc' => $data['showToc']
         );
         if ($mode == 'edit' || $mode == 'createArticle') {
           $settings['demoMode'] = $data['demoMode'];
@@ -59,7 +60,7 @@ include($themeDir . '/init-theme.php');
   </script>
 
 </head>
-<body class="mode-<?php echo $mode; ?>">
+<body class="mode-<?php echo $mode; ?> is-toc-<?php echo $data['showToc'] ? 'enabled' : 'disabled'; ?>">
 
 <?php
 

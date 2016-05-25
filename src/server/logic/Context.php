@@ -32,7 +32,8 @@ class Context {
             'theme'    => 'slim',
             'demoMode' => false,
             'openExternalLinksInNewTab' => true,
-            'showCompleteBreadcrumbs' => true
+            'showCompleteBreadcrumbs' => true,
+            'showToc'  => true
         );
 
         if (file_exists(__DIR__ . '/../../config.php')) {
