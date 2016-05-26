@@ -30,6 +30,10 @@
         headingsOffset = 80,
         headings;
 
+    document.getElementById('button-menu').addEventListener('click', function() {
+      document.body.classList.toggle('is-toc-visible');
+    });
+
     // tocbot needs ID attributes at the headings in order to function
     headings = document.getElementById('content').querySelectorAll(headingSelector);
     Array.prototype.forEach.call(headings, function (headingElem) {

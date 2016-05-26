@@ -11,6 +11,7 @@ $i18n = array(
     'button.cancel' => 'Abbrechen',
     'button.back' => 'Zurück',
     'button.edit' => 'Bearbeiten',
+    'button.menu' => 'Menü',
     'button.createUser' => 'Benutzer erstellen',
     'button.createArticle' => 'Artikel anlegen',
     'demoAlert.title' => 'Dies ist eine Demo.',

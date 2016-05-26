@@ -1,4 +1,14 @@
-<nav class="breadcrumbs"><div class="main-column"><?php
+<?php
+if ($data['showToc']) {
+    ?><nav class="toc-wrapper"></nav><?php
+}
+?><nav class="breadcrumbs"><div class="main-column"><?php
+
+// NOTE: We add buttons in reberse order because they float right
+
+if ($mode == 'view' && $data['showToc']) {
+    ?><div id="button-menu" class="btn btn-default btn-xs pull-right"><?php echo $i18n['button.menu']; ?></div><?php
+}
 if ($data['showCreateUserButton']) {
     ?><a class="btn btn-default btn-xs pull-right" href="<?php echo $data['requestPath']; ?>?createUser"><?php echo $i18n['button.createUser']; ?></a><?php
 }
@@ -19,8 +29,3 @@ foreach ($data['breadcrumbs'] as $item) {
     $isFirst = false;
 }
 ?></div></nav>
-<?php
-if ($data['showToc']) {
-    ?><nav class="toc-wrapper"></nav><?php
-}
-?>
