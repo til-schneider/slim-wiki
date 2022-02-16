@@ -14,21 +14,36 @@ class EditorService {
             || $methodName == 'createUserConfig');
     }
 
+    // Returns tuple of username/password or [null,null].
+    private function getUserCredentials() {
+        if (isset($_SERVER["REDIRECT_HTTP_AUTHORIZATION"]) && !empty($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+            list ($auth_type, $cred) = explode (" ", $_SERVER['REDIRECT_HTTP_AUTHORIZATION']);
+            if ($auth_type == 'Basic') {
+                return explode (":", base64_decode($cred));
+            }
+        } else if (isset($_SERVER['PHP_AUTH_USER'])) {
+            return array( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] );
+        }
+        return array(null, null);
+    }
+    
     // Returns one of: 'logged-in', 'no-credentials', 'wrong-credentials'
     public function getLoginState() {
-        if (!isset($_SERVER['PHP_AUTH_USER'])) {
-            return 'no-credentials';
-        } else {
-            $userInfo = $this->context->getConfig()['user.' . $_SERVER['PHP_AUTH_USER']];
-            if (isset($userInfo)) {
-                $loginHash = hash($userInfo['type'], $_SERVER['PHP_AUTH_PW'] . $userInfo['salt']);
-                if ($loginHash == $userInfo['hash']) {
-                    return 'logged-in';
-                }
-            }
+        list ($auth_user,  $auth_pw) = $this->getUserCredentials();
 
-            return 'wrong-credentials';
+        if (!($auth_user && $auth_pw)) {
+            return 'no-credentials';
         }
+
+        $userInfo = $this->context->getConfig()['user.' . $auth_user];
+        if (isset($userInfo)) {
+            $loginHash = hash($userInfo['type'], $auth_pw . $userInfo['salt']);
+            if ($loginHash == $userInfo['hash']) {
+                return 'logged-in';
+            }
+        }
+
+        return 'wrong-credentials';
     }
 
     public function assertLoggedIn() {
