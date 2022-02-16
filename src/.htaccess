@@ -1,7 +1,7 @@
 RewriteEngine On
 
 # Forward HTTP BASIC auth headers when using FastCGI
-RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 RewriteCond %{THE_REQUEST} !^GET\ .*?/client/([a-z]\.(js|css)|img/|libs/)
 RewriteCond %{THE_REQUEST} !^GET\ .*?/server/theme/
