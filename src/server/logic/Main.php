@@ -79,7 +79,7 @@ class Main {
         }
 
         if ($mode == 'edit' && ! $config['demoMode']) {
-            $loginState = $this->context->getEditorService()->getLoginState();
+            $loginState = $this->context->getLoginState();
             if ($loginState != 'logged-in') {
                 $this->setUnauthorizedHeaders();
 
