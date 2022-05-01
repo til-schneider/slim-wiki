@@ -78,7 +78,9 @@ class Main {
             $showCreateUserButton = ! $this->isUserDefined();
         }
 
-        if ($mode == 'edit' && ! $config['demoMode']) {
+        // In private mode, prompt for login in both edit and view modes.
+        if (! $config['demoMode']
+            && ($mode == 'edit' || $config['private'])) {
             $loginState = $this->context->getLoginState();
             if ($loginState != 'logged-in') {
                 $this->setUnauthorizedHeaders();
