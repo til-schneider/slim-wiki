@@ -33,7 +33,8 @@ class Context {
             'demoMode' => false,
             'openExternalLinksInNewTab' => true,
             'showCompleteBreadcrumbs' => true,
-            'showToc'  => true
+            'showToc'  => true,
+            'private'  => false,
         );
 
         if (file_exists(__DIR__ . '/../../config.php')) {
