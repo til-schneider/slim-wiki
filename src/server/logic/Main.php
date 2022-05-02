@@ -142,6 +142,8 @@ class Main {
         $data['requestPath'] = implode('/', $requestPathArray);
         $data['articleFilename'] = $articleFilename;
 
+        $articleMarkdown = '';
+
         if ($mode == 'private') {
             $articleMarkdown = $this->context->getI18n()['private.placeholder'];
         } else if ($mode == 'view' || $mode == 'edit') {
