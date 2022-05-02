@@ -141,9 +141,7 @@ class Main {
         $data['articleFilename'] = $articleFilename;
 
         if ($mode == 'private') {
-            $articleMarkdown = "# Private Wiki\n\nSign up to access any content.";
-            $data['articleMarkdown'] = $articleMarkdown;
-            $data['articleHtml'] = $renderService->renderMarkdown($articleMarkdown, false);
+            $articleMarkdown = $this->context->getI18n()['private.placeholder'];
         } else if ($mode == 'view' || $mode == 'edit') {
             if ($renderService->articleExists($articleFilename)) {
                 $articleMarkdown = file_get_contents($this->context->getArticleBaseDir() . $articleFilename);
@@ -161,9 +159,10 @@ class Main {
                 $editorService = $this->context->getEditorService();
                 $articleMarkdown = $editorService->getNewArticleMarkdown($pageTitle);
             }
-            $data['articleMarkdown'] = $articleMarkdown;
-            $data['articleHtml'] = $renderService->renderMarkdown($articleMarkdown, $mode == 'edit');
         }
+
+        $data['articleMarkdown'] = $articleMarkdown;
+        $data['articleHtml'] = $renderService->renderMarkdown($articleMarkdown, $mode == 'edit');
 
         $this->renderPage($data);
     }
