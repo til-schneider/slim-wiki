@@ -123,8 +123,8 @@ class Main {
         }
 
         $data = array();
-        $data['baseUrl']    = $baseUrl;
-        $data['basePath']   = $basePath;
+        $data['baseUrl'] = $baseUrl;
+        $data['basePath'] = $basePath;
         $data['mode'] = $mode;
         $data['fatalErrorMessage'] = $fatalErrorMessage;
 
