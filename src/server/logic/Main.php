@@ -79,8 +79,7 @@ class Main {
         }
 
         // In private mode, prompt for login in both edit and view modes.
-        if (! $config['demoMode']
-            && ($mode == 'edit' || $config['private'])) {
+        if (! $config['demoMode'] && ($mode == 'edit' || $config['private'])) {
             $loginState = $this->context->getLoginState();
             if ($loginState != 'logged-in') {
                 $this->setUnauthorizedHeaders();
@@ -90,72 +89,83 @@ class Main {
             }
         }
 
+        if (! $this->context->canAccessPage()) {
+            $this->setUnauthorizedHeaders();
+
+            $mode = 'private';
+            $showCreateUserButton = true;
+        }
+
         $articleFilename = $this->getArticleFilename($requestPathArray);
         if ($articleFilename == null) {
             header('HTTP/1.0 403 Forbidden');
             header('Content-Type:text/html; charset=utf-8');
             echo '<h1>Forbidden</h1>';
-        } else {
-            $renderService = $this->context->getRenderService();
-
-            $fatalErrorMessage = null;
-            if ($mode == 'view') {
-                if (! $renderService->articleExists($articleFilename)) {
-                    $mode = 'noSuchArticle';
-                }
-            } else if ($mode == 'edit') {
-                $editorService = $this->context->getEditorService();
-                $fatalErrorMessage = $editorService->checkForError($articleFilename);
-                if ($fatalErrorMessage != null) {
-                    $fatalErrorMessage = $this->context->getI18n()['error.editingArticleFailed'] . '<br/>' . $fatalErrorMessage;
-                    $mode = 'error';
-                } else if (! $renderService->articleExists($articleFilename) && ! $config['demoMode']) {
-                    $mode = 'createArticle';
-                    $showCreateUserButton = false;
-                }
-            }
-
-            $data = array();
-            $data['baseUrl']    = $baseUrl;
-            $data['basePath']   = $basePath;
-            $data['mode'] = $mode;
-            $data['fatalErrorMessage'] = $fatalErrorMessage;
-
-            foreach (array('wikiName', 'theme', 'demoMode', 'showToc', 'footerHtml') as $key) {
-                if (isset($config[$key])) {
-                    $data[$key] = $config[$key];
-                }
-            }
-
-            $data['breadcrumbs'] = $this->createBreadcrumbs($requestPathArray);
-            $data['showCreateUserButton'] = $showCreateUserButton;
-
-            $data['requestPath'] = implode('/', $requestPathArray);
-            $data['articleFilename'] = $articleFilename;
-
-            if ($mode == 'view' || $mode == 'edit') {
-                if ($renderService->articleExists($articleFilename)) {
-                    $articleMarkdown = file_get_contents($this->context->getArticleBaseDir() . $articleFilename);
-                } else if ($config['demoMode']) {
-                    // Open a fake "new article" for demo mode
-
-                    // We have no real page title here -> Create one from the file name
-                    $lastPathPart = end($requestPathArray);
-                    if ($lastPathPart == '') {
-                        // This is the `index.md` of a directory -> Use the directory name
-                        $lastPathPart = prev($requestPathArray);
-                    }
-                    $pageTitle = str_replace('_', ' ', $lastPathPart);
-
-                    $editorService = $this->context->getEditorService();
-                    $articleMarkdown = $editorService->getNewArticleMarkdown($pageTitle);
-                }
-                $data['articleMarkdown'] = $articleMarkdown;
-                $data['articleHtml'] = $renderService->renderMarkdown($articleMarkdown, $mode == 'edit');
-            }
-
-            $this->renderPage($data);
+            return;
         }
+        $renderService = $this->context->getRenderService();
+
+        $fatalErrorMessage = null;
+        if ($mode == 'view') {
+            if (!$renderService->articleExists($articleFilename)) {
+                $mode = 'noSuchArticle';
+            }
+        } else if ($mode == 'edit') {
+            $editorService = $this->context->getEditorService();
+            $fatalErrorMessage = $editorService->checkForError($articleFilename);
+            if ($fatalErrorMessage != null) {
+                $fatalErrorMessage = $this->context->getI18n()['error.editingArticleFailed'] . '<br/>' . $fatalErrorMessage;
+                $mode = 'error';
+            } else if (!$renderService->articleExists($articleFilename) && !$config['demoMode']) {
+                $mode = 'createArticle';
+                $showCreateUserButton = false;
+            }
+        }
+
+        $data = array();
+        $data['baseUrl']    = $baseUrl;
+        $data['basePath']   = $basePath;
+        $data['mode'] = $mode;
+        $data['fatalErrorMessage'] = $fatalErrorMessage;
+
+        foreach (array('wikiName', 'theme', 'demoMode', 'showToc', 'footerHtml') as $key) {
+            if (isset($config[$key])) {
+                $data[$key] = $config[$key];
+            }
+        }
+
+        $data['breadcrumbs'] = $this->createBreadcrumbs($requestPathArray);
+        $data['showCreateUserButton'] = $showCreateUserButton;
+
+        $data['requestPath'] = implode('/', $requestPathArray);
+        $data['articleFilename'] = $articleFilename;
+
+        if ($mode == 'private') {
+            $articleMarkdown = "# Private Wiki\n\nSign up to access any content.";
+            $data['articleMarkdown'] = $articleMarkdown;
+            $data['articleHtml'] = $renderService->renderMarkdown($articleMarkdown, false);
+        } else if ($mode == 'view' || $mode == 'edit') {
+            if ($renderService->articleExists($articleFilename)) {
+                $articleMarkdown = file_get_contents($this->context->getArticleBaseDir() . $articleFilename);
+            } else if ($config['demoMode']) {
+                // Open a fake "new article" for demo mode
+
+                // We have no real page title here -> Create one from the file name
+                $lastPathPart = end($requestPathArray);
+                if ($lastPathPart == '') {
+                    // This is the `index.md` of a directory -> Use the directory name
+                    $lastPathPart = prev($requestPathArray);
+                }
+                $pageTitle = str_replace('_', ' ', $lastPathPart);
+
+                $editorService = $this->context->getEditorService();
+                $articleMarkdown = $editorService->getNewArticleMarkdown($pageTitle);
+            }
+            $data['articleMarkdown'] = $articleMarkdown;
+            $data['articleHtml'] = $renderService->renderMarkdown($articleMarkdown, $mode == 'edit');
+        }
+
+        $this->renderPage($data);
     }
 
     private function setUnauthorizedHeaders() {

@@ -102,6 +102,17 @@ class Context {
         return 'wrong-credentials';
     }
 
+    /**
+     * Determines if the user has permission to see the requested page.
+     */
+    public function canAccessPage() {
+        if ($this->getConfig()['private']) {
+            return $this->getLoginState() == 'logged-in';
+        } else {
+            return true;
+        }
+    }
+
     public function assertLoggedIn() {
         if ($this->getLoginState() != 'logged-in') {
             throw new Exception('Not logged in');
