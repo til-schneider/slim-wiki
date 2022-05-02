@@ -91,7 +91,7 @@ class Context {
             return 'no-credentials';
         }
 
-        $userInfo = $this->context->getConfig()['user.' . $auth_user];
+        $userInfo = $this->getConfig()['user.' . $auth_user];
         if (isset($userInfo)) {
             $loginHash = hash($userInfo['type'], $auth_pw . $userInfo['salt']);
             if ($loginHash == $userInfo['hash']) {
