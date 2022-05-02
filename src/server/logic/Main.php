@@ -79,7 +79,7 @@ class Main {
         }
 
         // In private mode, prompt for login in both edit and view modes.
-        if (! $config['demoMode'] && ($mode == 'edit' || $config['private'])) {
+        if (! $config['demoMode'] && $mode == 'edit') {
             $loginState = $this->context->getLoginState();
             if ($loginState != 'logged-in') {
                 $this->setUnauthorizedHeaders();
@@ -89,7 +89,8 @@ class Main {
             }
         }
 
-        if (! $this->context->canAccessPage()) {
+        // Limit what users can see and request login in private mode, unless we're in account creation.
+        if (! $this->context->canAccessPage() && $mode !== 'createUser') {
             $this->setUnauthorizedHeaders();
 
             $mode = 'private';
@@ -103,6 +104,7 @@ class Main {
             echo '<h1>Forbidden</h1>';
             return;
         }
+
         $renderService = $this->context->getRenderService();
 
         $fatalErrorMessage = null;
