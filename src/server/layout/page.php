@@ -110,7 +110,7 @@ if ($mode == 'edit') {
     <?php
   }
 
-  if ($mode == 'view' || $mode == 'edit' || $mode == 'noSuchArticle' || $mode == 'createArticle') {
+  if ($mode == 'view' || $mode == 'edit' || $mode == 'noSuchArticle' || $mode == 'private' || $mode == 'createArticle') {
     include($themeDir . '/page-header.php');
   }
 
@@ -121,7 +121,7 @@ if ($mode == 'edit') {
       </div></div><?php
   }
 
-  if ($mode == 'view' || $mode == 'edit') {
+  if ($mode == 'view' || $mode == 'edit' || $mode == 'private') {
     include($themeDir . '/content.php');
   }
 

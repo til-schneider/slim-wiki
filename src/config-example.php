@@ -19,3 +19,6 @@ $config['lang'] = 'en'; // 'de' or 'en'
 //$config['showToc'] = false;
 
 //$config['footerHtml'] = '&copy; Copyright 2000-'.date('Y').' My name';
+
+// Make all content read-only for guests, requiring login to read and edit.
+//$config['private'] = true;

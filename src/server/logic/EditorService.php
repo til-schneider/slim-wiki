@@ -14,44 +14,6 @@ class EditorService {
             || $methodName == 'createUserConfig');
     }
 
-    // Returns tuple of username/password or [null,null].
-    private function getUserCredentials() {
-        if (isset($_SERVER["REDIRECT_HTTP_AUTHORIZATION"]) && !empty($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
-            list ($auth_type, $cred) = explode (" ", $_SERVER['REDIRECT_HTTP_AUTHORIZATION']);
-            if ($auth_type == 'Basic') {
-                return explode (":", base64_decode($cred));
-            }
-        } else if (isset($_SERVER['PHP_AUTH_USER'])) {
-            return array( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] );
-        }
-        return array(null, null);
-    }
-    
-    // Returns one of: 'logged-in', 'no-credentials', 'wrong-credentials'
-    public function getLoginState() {
-        list ($auth_user,  $auth_pw) = $this->getUserCredentials();
-
-        if (!($auth_user && $auth_pw)) {
-            return 'no-credentials';
-        }
-
-        $userInfo = $this->context->getConfig()['user.' . $auth_user];
-        if (isset($userInfo)) {
-            $loginHash = hash($userInfo['type'], $auth_pw . $userInfo['salt']);
-            if ($loginHash == $userInfo['hash']) {
-                return 'logged-in';
-            }
-        }
-
-        return 'wrong-credentials';
-    }
-
-    public function assertLoggedIn() {
-        if ($this->getLoginState() != 'logged-in') {
-            throw new Exception('Not logged in');
-        }
-    }
-
     public function checkForError($articleFilename) {
         function canWriteFileOrParent($filename) {
             if ($filename == '') {
@@ -104,7 +66,7 @@ class EditorService {
     }
 
     public function saveArticle($articleFilename, $markdownText) {
-        $this->assertLoggedIn();
+        $this->context->assertLoggedIn();
 
         if (! $this->context->isValidArticleFilename($articleFilename)) {
             throw new Exception("Invalid article filename: '$articleFilename'");

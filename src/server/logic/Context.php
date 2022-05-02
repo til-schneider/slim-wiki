@@ -33,7 +33,8 @@ class Context {
             'demoMode' => false,
             'openExternalLinksInNewTab' => true,
             'showCompleteBreadcrumbs' => true,
-            'showToc'  => true
+            'showToc'  => true,
+            'private'  => false,
         );
 
         if (file_exists(__DIR__ . '/../../config.php')) {
@@ -67,6 +68,55 @@ class Context {
     public function isValidArticleFilename($articleFilename) {
         // Don't allow to escape from the article base directory
         return ! is_string($articleFilename) || ! strpos($articleFilename, '..');
+    }
+
+    // Returns tuple of username/password or [null,null].
+    private function getUserCredentials() {
+        if (isset($_SERVER["REDIRECT_HTTP_AUTHORIZATION"]) && !empty($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+            list ($auth_type, $cred) = explode (" ", $_SERVER['REDIRECT_HTTP_AUTHORIZATION']);
+            if ($auth_type == 'Basic') {
+                return explode (":", base64_decode($cred));
+            }
+        } else if (isset($_SERVER['PHP_AUTH_USER'])) {
+            return array( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] );
+        }
+        return array(null, null);
+    }
+
+    // Returns one of: 'logged-in', 'no-credentials', 'wrong-credentials'
+    public function getLoginState() {
+        list ($auth_user,  $auth_pw) = $this->getUserCredentials();
+
+        if (!($auth_user && $auth_pw)) {
+            return 'no-credentials';
+        }
+
+        $userInfo = $this->getConfig()['user.' . $auth_user];
+        if (isset($userInfo)) {
+            $loginHash = hash($userInfo['type'], $auth_pw . $userInfo['salt']);
+            if ($loginHash == $userInfo['hash']) {
+                return 'logged-in';
+            }
+        }
+
+        return 'wrong-credentials';
+    }
+
+    /**
+     * Determines if the user has permission to see the requested page.
+     */
+    public function canAccessPage() {
+        if ($this->getConfig()['private']) {
+            return $this->getLoginState() == 'logged-in';
+        } else {
+            return true;
+        }
+    }
+
+    public function assertLoggedIn() {
+        if ($this->getLoginState() != 'logged-in') {
+            throw new Exception('Not logged in');
+        }
     }
 
     public function getEditorService() {
